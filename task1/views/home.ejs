@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task 1</title>
+    <link rel="icon" href="data:,">
+</head>
+<body>
+    <h1><a href="/">WEB</a></h1>
+    <a href="/author">author</a>
+    <ol type="1">
+        <% var i = 0
+            while(i< list.length) 
+      {  %>
+        <li><a href="/page/<%=list[i].id%>"><%=list[i].name%></a></li>
+        <% i += 1 } %>
+    </ol>
+    <%- control %>
+    <%- body %>
+</body>
+</html>
