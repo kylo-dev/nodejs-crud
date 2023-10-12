@@ -1,19 +1,17 @@
-<!-- 컴퓨터공학과 201935247 김현겸-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Task 1</title>
+    <title>WEB1</title>
+    <meta charset="utf-8">
     <link rel="icon" href="data:,">
 </head>
 <body>
-    <h1><a href="/">WEB</a></h1>
-    <a href="/">author</a>
+    <h2><a href="/">WEB</a></h2>
     <ol type="1">
         <% var i = 0
             while(i< list.length) 
       {  %>
-        <li><a href="/page/<%=list[i].id%>"><%=list[i].name%></a></li>
+        <li><a href="/page/<%=list[i].id%>"><%=list[i].title%></a></li>
         <% i += 1 } %>
     </ol>
     <%- control %>
