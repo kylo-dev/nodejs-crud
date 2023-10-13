@@ -30,7 +30,7 @@ module.exports = {
                 }
 
                 var c = `<a href="/create">create</a>&nbsp;&nbsp;<a href="/update/${id}">update</a>&nbsp;&nbsp;
-                <a href="/delete/${topic[0].id}" onclick='if(confirm("정말로 삭제하시겠습니까?")==false){return false}'>delete</a>`;
+                <a href="/delete/${id}" onclick='if(confirm("정말로 삭제하시겠습니까?")==false){return false}'>delete</a>`;
                 var b = `<h2>${topic[0].title}</h2>
                         <p>${topic[0].descrpt}</p>
                         <p>by ${topic[0].name}</p>`;
@@ -107,16 +107,32 @@ module.exports = {
                 if(error2){
                     throw error2;
                 }
-                var context = {list: topics,
-                                control:`<a href="/create">create</a> <a href="/update/${topic[0].id}">update</a>`,
-                                body: `<form action="/update_process" method="post">
-                                <input type="hidden" name="id" value="${topic[0].id}">
-                                <p><input type="text" name="title" placeholder="title" value="${topic[0].title}"></p>
-                                <p><textarea name="description" placeholder="description">${topic[0].descrpt}</textarea></p>
-                                <p><input type="submit"></p></form>`
-                            };
-                req.app.render('home', context, (err, html)=>{
-                    res.end(html);
+                db.query(`select * from author`, (err, authors)=>{
+                    if(err){ throw err; }
+                    var i = 0;
+                    var tag = '';
+                    while(i<authors.length){
+                        var selected = '';
+                        if(authors[i].id === (topic[0].author_id)){
+                            selected = 'selected';
+                        }
+                        tag += `<option value="${authors[i].id}" ${selected}>${authors[i].name}</option>`;
+                        i++;
+                    }
+                    var context = {list: topics,
+                        control:`<a href="/create">create</a> <a href="/update/${topic[0].id}">update</a>`,
+                        body: `<form action="/update_process" method="post">
+                        <input type="hidden" name="id" value="${topic[0].id}">
+                        <p><input type="text" name="title" placeholder="title" value="${topic[0].title}"></p>
+                        <p><textarea name="description" placeholder="description">${topic[0].descrpt}</textarea></p>
+                        <p><select name="author">
+                            ${tag}
+                        </select></p>
+                        <p><input type="submit"></p></form>`
+                    };
+                    req.app.render('home', context, (err, html)=>{
+                        res.end(html);
+                    });
                 });
             });
         });
@@ -131,8 +147,8 @@ module.exports = {
             var post = qs.parse(body);
             sanitizedTitle = sanitizeHtml(post.title); // 업데이트 쿼리에도 sanitizeHtml 적용하여 저장하기
             sanitizedDescription = sanitizeHtml(post.description);
-            db.query('UPDATE topic SET title=?, descrpt=? WHERE id=?',
-                [sanitizedTitle,sanitizedDescription, post.id], (error, result) =>{
+            db.query('UPDATE topic SET title=?, descrpt=?, author_id=? WHERE id=?',
+                [sanitizedTitle, sanitizedDescription, post.author,post.id], (error, result) =>{
                     res.writeHead(302, {Location: `/page/${post.id}`});
                     res.end();
                 });

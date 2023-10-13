@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+var cookie = require('cookie');
 
 app.set('views', __dirname+'/views');
 app.set('view engine', 'ejs');
@@ -18,6 +19,16 @@ var path = require('path');
 //     console.log(path.parse(queryData.id));
 //     res.end('path module test');
 // });
+app.get('/cookie', (req, res)=>{
+    // res.writeHead(200, {
+    //     'Set-Cookie': ['Yummy_cookie=choco', 'tasty_cookie=strawberry']
+    // });
+    console.log(req.headers.cookie);
+    var cookies = cookie.parse(req.headers.cookie);
+    console.log(cookies);
+    res.end('Cookie!');
+});
+
 app.get('/', (req, res)=>{
     topic.home(req, res);
 });
@@ -44,6 +55,14 @@ app.post('/update_process', (req, res)=>{
 
 app.get('/delete/:pageId', (req, res)=>{
     topic.delete_process(req, res);
+});
+
+app.get('/author', (req, res)=>{
+    author.home(req,res);
+});
+
+app.post('/author/create_process', (req, res)=>{
+    author.create_process(req, res);
 });
 
 app.listen(3000, ()=>console.log('Example app listening on port 3000'));
