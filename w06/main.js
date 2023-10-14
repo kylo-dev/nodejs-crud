@@ -57,4 +57,9 @@ app.post('/author/update_process', (req, res)=>{
     author.update_process(req,res);
 });
 
+app.get('/author/delete/:pageId', (req, res)=>{
+    author.delete_process(req, res);
+});
+
+
 app.listen(3000, ()=>console.log('Example app listening on port 3000'));

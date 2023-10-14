@@ -15,7 +15,8 @@ module.exports = {
                 var tag = '<table border="1" style="border-collapse: collapse;">';
                 while(i<authors.length){
                     tag = tag + `<tr><td>${authors[i].name}</td><td>${authors[i].profile}</td>
-                                <td><a href="/author/update/${authors[i].id}">update</a></td><td><a href="/author/delete">delete</a></td></tr>`;
+                                <td><a href="/author/update/${authors[i].id}">update</a></td>
+                                <td><a href="/author/delete/${authors[i].id}">delete</a></td></tr>`;
                     i++;
                 }
                 tag = tag + '</table>';
@@ -25,7 +26,6 @@ module.exports = {
                             <p><input type="text"  name="profile" placeholder="profile"></p>
                             <p><input type="submit" value="CREATE"></p>
                             </form>`;
-    
                 var context = {
                     title: 'Author list',
                     list: topics,
@@ -94,6 +94,7 @@ module.exports = {
             });
         });
     },
+
     update_process : (req, res) =>{
         var body ='';
         req.on('data', (data)=>{
@@ -110,15 +111,26 @@ module.exports = {
             });
         });
     },
-}
 
-    // delete_process : (req, res)=>{
-    //     id = req.params.pageId;
-    //     db.query('DELETE FROM author WHERE id=?', [id], (error, result)=>{
-    //         if(error){
-    //             throw error;
-    //         }
-    //         res.writeHead(302, {Location: `/`});
-    //         res.end();
-    //     });
-    // }
+    delete_process : (req, res)=>{
+        id = req.params.pageId;
+        // db.query(`DELETE FROM author WHERE id=?`, [id], (error, result)=>{
+        //     if(error){ throw error; }
+        //     res.writeHead(302, {Location: `/author`});
+        //     res.end();
+        // });
+        db.query(`SELECT COUNT(*) as topicCount FROM topic WHERE topic.author_id=?`, [id], (error, result)=>{
+                        if(error){ return error; }
+
+                        const topicCount = result[0].topicCount;
+                        if(topicCount > 0){
+                            res.send("<script>alert('작성자의 토픽이 존재하여 삭제할 수 없습니다.'); window.location.href = '/author';</script>");
+                        } else{
+                            db.query(`DELETE FROM author WHERE id=?`, [id], (error2, result2)=>{
+                                if(error2){ throw error2; }
+                                res.send("<script>alert('선택한 작성자의 정보가 삭제 되었습니다.'); window.location.href = '/author';</script>");
+                            });
+                        }
+                    });
+    },
+}
