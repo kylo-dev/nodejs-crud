@@ -9,6 +9,7 @@ module.exports = {
             var b = '<h2>Welcome</h2><p>Node.js Start Page</p>';
 
             var context = {
+                title: "Topic List",
                 list: topics,
                 control: c,
                 body: b};
@@ -35,7 +36,8 @@ module.exports = {
                         <p>${topic[0].descrpt}</p>
                         <p>by ${topic[0].name}</p>`;
 
-                var context = {list:topics,
+                var context = {title: "Topic List",
+                                list:topics,
                                 control: c,
                                 body: b};
                 req.app.render('home', context, (err, html)=>{
@@ -57,7 +59,8 @@ module.exports = {
                     tag += `<option value="${authors[i].id}">${authors[i].name}</option>`;
                     i++;
                 };
-                var context = { list:topics,
+                var context = { title: "Topic List",
+                    list:topics,
                     control: `<a href="/create">create</a>`,
                     body: `<form action="/create_process" method="post">
                             <p><input type="text" name="title" placeholder="title"></p>
@@ -96,7 +99,6 @@ module.exports = {
     },
 
     update : (req, res)=>{
-        var _url = req.url;
         id = req.params.pageId;
 
         db.query(`SELECT * FROM topic`, (error, topics)=>{
@@ -119,7 +121,8 @@ module.exports = {
                         tag += `<option value="${authors[i].id}" ${selected}>${authors[i].name}</option>`;
                         i++;
                     }
-                    var context = {list: topics,
+                    var context = {title: "Topic List",
+                        list: topics,
                         control:`<a href="/create">create</a> <a href="/update/${topic[0].id}">update</a>`,
                         body: `<form action="/update_process" method="post">
                         <input type="hidden" name="id" value="${topic[0].id}">
@@ -147,8 +150,9 @@ module.exports = {
             var post = qs.parse(body);
             sanitizedTitle = sanitizeHtml(post.title); // 업데이트 쿼리에도 sanitizeHtml 적용하여 저장하기
             sanitizedDescription = sanitizeHtml(post.description);
+            sanitizedAuthor = sanitizeHtml(post.author);
             db.query('UPDATE topic SET title=?, descrpt=?, author_id=? WHERE id=?',
-                [sanitizedTitle, sanitizedDescription, post.author,post.id], (error, result) =>{
+                [sanitizedTitle, sanitizedDescription, sanitizedAuthor,post.id], (error, result) =>{
                     res.writeHead(302, {Location: `/page/${post.id}`});
                     res.end();
                 });

@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-var cookie = require('cookie');
 
 app.set('views', __dirname+'/views');
 app.set('view engine', 'ejs');
@@ -12,22 +11,6 @@ var author = require('./lib/author');
 var url = require('url');
 var qs = require('querystring');
 var path = require('path');
-
-// app.get('/', (req, res)=>{
-//     var _url = req.url;
-//     var queryData = url.parse(_url, true).query();
-//     console.log(path.parse(queryData.id));
-//     res.end('path module test');
-// });
-app.get('/cookie', (req, res)=>{
-    // res.writeHead(200, {
-    //     'Set-Cookie': ['Yummy_cookie=choco', 'tasty_cookie=strawberry']
-    // });
-    console.log(req.headers.cookie);
-    var cookies = cookie.parse(req.headers.cookie);
-    console.log(cookies);
-    res.end('Cookie!');
-});
 
 app.get('/', (req, res)=>{
     topic.home(req, res);
@@ -57,12 +40,21 @@ app.get('/delete/:pageId', (req, res)=>{
     topic.delete_process(req, res);
 });
 
+//== authort URL 부분 ==//
 app.get('/author', (req, res)=>{
     author.home(req,res);
 });
 
 app.post('/author/create_process', (req, res)=>{
     author.create_process(req, res);
+});
+
+app.get('/author/update/:pageId', (req, res)=>{
+    author.update(req, res);
+});
+
+app.post('/author/update_process', (req, res)=>{
+    author.update_process(req,res);
 });
 
 app.listen(3000, ()=>console.log('Example app listening on port 3000'));
