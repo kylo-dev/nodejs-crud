@@ -2,7 +2,7 @@
 ## Express - Node.js 학습하기
 
 * [mysql data 타입 적용](#node---mysql-date-타입-적용하기)
-* [URL Parsing & Querystring](#URL-parsing-&-querystring)
+* [URL Parsing & Querystring](#url-parsing과-querystring)
 
 
 > 2023.10.6
@@ -27,7 +27,7 @@ dateStrings: "date",
 
 > 2023.10.16
 
-### URL parsing & querystring
+### URL parsing과 querystring
 
 URL이란
 네트워크 상에서 자원이 어디 있는지를 알려주기 위한 규악입니다. 웹 사이트 주소뿐만 아니라 컴퓨터 네트워크상의 자원을 나타낼 수 있습니다.
