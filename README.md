@@ -3,7 +3,7 @@
 
 * [mysql data 타입 적용](#node---mysql-date-타입-적용하기)
 * [URL Parsing & Querystring](#url-parsing과-querystring)
-
+* [res.send() 사용법](#res.send()-사용하기)
 
 > 2023.10.6
 
@@ -69,3 +69,16 @@ const result = qs.parse("foo=1&abc=2")
 console.log(result)
 // result : [Object: null prototype] { foo: '1', abc: '2' }
 ```
+
+> 2023.10.18
+
+### res.send() 사용하기
+
+express를 사용하면 res.wrtieHead() 말고 res.send() 메소드를 통해 편하게 클라이언트에게 메시지를 전달할 수 있습니다.
+
+```javascript
+res.send("<script>alert('작성자의 토픽이 존재하여 삭제할 수 없습니다.'); window.location.href = '/author';</script>");
+```
+
+res.send()는 res.write()와 res.end()의 통합 방식이기에 한 번만 적용됩니다.
+
