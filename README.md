@@ -3,7 +3,7 @@
 
 * [mysql data 타입 적용](#node---mysql-date-타입-적용하기)
 * [URL Parsing & Querystring](#url-parsing과-querystring)
-* [res.send() 사용법](#res.send()-사용하기)
+* [res.send() 사용법](#res.send-사용하기)
 
 > 2023.10.6
 
@@ -72,7 +72,7 @@ console.log(result)
 
 > 2023.10.18
 
-### res.send() 사용하기
+### res.send 사용하기
 
 express를 사용하면 res.wrtieHead() 말고 res.send() 메소드를 통해 편하게 클라이언트에게 메시지를 전달할 수 있습니다.
 
