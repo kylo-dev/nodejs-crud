@@ -2,7 +2,7 @@
 ## Express - Node.js 학습하기
 
 * [mysql data 타입 적용](#node---mysql-date-타입-적용하기)
-* [URL Parsing & Querystring](#url-parsing-&-querystring)
+* [URL Parsing & Querystring](#URL-parsing-&-querystring)
 
 
 > 2023.10.6
