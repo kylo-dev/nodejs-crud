@@ -114,11 +114,7 @@ module.exports = {
 
     delete_process : (req, res)=>{
         id = req.params.pageId;
-        // db.query(`DELETE FROM author WHERE id=?`, [id], (error, result)=>{
-        //     if(error){ throw error; }
-        //     res.writeHead(302, {Location: `/author`});
-        //     res.end();
-        // });
+
         db.query(`SELECT COUNT(*) as topicCount FROM topic WHERE topic.author_id=?`, [id], (error, result)=>{
                         if(error){ return error; }
 

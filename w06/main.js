@@ -4,13 +4,8 @@ const app = express();
 app.set('views', __dirname+'/views');
 app.set('view engine', 'ejs');
 
-var db = require('./lib/db');
 var topic = require('./lib/topic');
 var author = require('./lib/author');
-
-var url = require('url');
-var qs = require('querystring');
-var path = require('path');
 
 app.get('/', (req, res)=>{
     topic.home(req, res);
