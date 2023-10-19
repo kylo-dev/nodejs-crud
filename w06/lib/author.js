@@ -69,7 +69,7 @@ module.exports = {
                 var tag = '<table border="1" style="border-collapse: collapse;">';
                 while(i<authors.length){
                     tag = tag + `<tr><td>${authors[i].name}</td><td>${authors[i].profile}</td>
-                                <td><a href="/author/update">update</a></td><td><a href="/author/delete">delete</a></td></tr>`;
+                                <td><a href="/author/update/${id}">update</a></td><td><a href="/author/delete/${id}">delete</a></td></tr>`;
                     i++;
                 }
                 tag = tag + '</table>';
