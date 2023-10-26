@@ -1,8 +1,10 @@
+// 컴퓨터공학과 201935247 김현겸
 const db = require('./db');
 var qs = require('querystring');
 var sanitizeHtml = require('sanitize-html');
 var cookie = require('cookie');
 
+// 인증된 사용자인지 확인
 function authIsOwner(req, res) {
     var isOwner = false;
     var cookies = {};
@@ -15,6 +17,7 @@ function authIsOwner(req, res) {
     return isOwner;
 }
 
+// login <a>태그 표시 상태
 function authStatusUI(req, res) {
     var login = '<a href="/login">login</a>';
     if(authIsOwner(req, res)){
