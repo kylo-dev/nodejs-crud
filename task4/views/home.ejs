@@ -1,0 +1,24 @@
+<!-- 컴퓨터공학과 201935247 김현겸-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WEB1</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="data:,">
+</head>
+<body>
+    <%- lg %>
+
+    <h2><a href="/"><%=title%></a></h2>
+    <a href="/author">저자관리</a>
+    <ol type="1">
+        <% var i = 0
+            while(i< list.length) 
+      {  %>
+        <li><a href="/page/<%=list[i].id%>"><%=list[i].title%></a></li>
+        <% i += 1 } %>
+    </ol>
+    <%- control %>
+    <%- body %>
+</body>
+</html>
