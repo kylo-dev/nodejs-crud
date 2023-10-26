@@ -232,5 +232,11 @@ module.exports = {
         req.session.destroy((err)=>{
             res.redirect('/');
         })
-    }
+    },
+    upload : (req, res)=>{
+        var context = { lg: ''};
+        req.app.render('uploadtest', context, (err, html)=>{
+            res.end(html);
+        });
+    },
 }
