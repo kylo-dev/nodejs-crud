@@ -82,3 +82,55 @@ res.send("<script>alert('작성자의 토픽이 존재하여 삭제할 수 없�
 
 res.send()는 res.write()와 res.end()의 통합 방식이기에 한 번만 적용됩니다.
 
+> 2023.10.27
+
+### 1. express.Router()로 라우터 다루기
+
+Express.js 프레임워크에서 제공하는 **라우팅 및 미들웨어 시스템**을 구성하는데 사용되는 클래스입니다.
+
+이를 통해 애플리케이션의 라우팅(URL)을 구조적으로 관리하고 모듈화할 수 있습니다.
+
+```javascript
+// 모듈 불러오기 (router/rootRouter)
+var router = express.Router();
+router.get('/', (req, res)=>{});
+module.exports = router;
+```
+* router 인스턴스를 사용하여 앤드 포인트와 관련된 라우팅 핸들러 및 미들웨어를 등록할 수 있습니다. (router 폴더 안에 작성)
+
+```javascript
+// main.js
+var rootRouter = require('./router/rootRouter');
+
+app.use('/', rootRouter);
+```
+* 라우터를 애플리케이션에 연결하여 사용합니다.
+
+[w08 코드](https://github.com/kylo-dev/nodejs-crud/blob/main/w08/router/rootRouter.js)
+
+
+### 2. body-parser 모듈 다루기
+
+HTTP 요청의 본문을 파싱하는데 사용됩니다.
+
+HTTP 요청의 본문에는 클라이언트가 서버로 전송한 데이터가 포함됩니다.
+
+body-parser를 사용하면 간편하게 request body 부분을 Javascript 객체로 변환하거나 특정 형식의 데이터로 추출할 수 있습니다.
+
+```javascript
+// main.js
+var bodyParser = require('body-parser');
+app.user(bodyParser.urlencoded({extended: false}));
+```
+
+```javascript
+// 기존 코드
+var body = '';
+req.on('data',(data)=>{ body = body +data});
+req.on('end', ()=>{ var post = qs.parse(body) ...});
+
+// body-parser 적용 코드
+var post = req.body;
+```
+
+main.js에 body-parser 모듈을 등록하면, URL, Segmatic URL, form 태그 등 을 통해 사용자로부터 데이터를 전달받을 때 간편하게 파싱할 수 있습니다.
