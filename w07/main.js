@@ -1,6 +1,14 @@
 // 컴퓨터공학과 201935247 김현겸
 const express = require('express');
 const app = express();
+app.set('views', __dirname+'/views');
+app.set('view engine', 'ejs');
+
+// 사용자 정의 모듈
+var topic = require('./lib/topic');
+var author = require('./lib/author');
+var db = require('./lib/db');
+
 var session = require('express-session');
 var MySqlStore = require('express-mysql-session')(session);
 var options = {
@@ -10,6 +18,7 @@ var options = {
     database : 'webdb2023'
 };
 var sessionStore = new MySqlStore(options);
+var bodyParser = require('body-parser');
 
 app.use(session({
     secret : 'keyboard cat',
@@ -17,13 +26,9 @@ app.use(session({
     saveUninitialized : true,
     store : sessionStore
 }));
+app.use(bodyParser.urlencoded({extended: false}));
 
-app.set('views', __dirname+'/views');
-app.set('view engine', 'ejs');
-
-var topic = require('./lib/topic');
-var author = require('./lib/author');
-
+// URL 분류기
 app.get('/', (req, res)=>{
     topic.home(req, res);
 });
