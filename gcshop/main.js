@@ -4,7 +4,7 @@
 const express = require('express');
 const app = express();
 app.set('views', __dirname + '/views');
-app.set('view engine', ejs);
+app.set('view engine', 'ejs');
 
 // router 모듈
 var rootRouter = require('./router/rootRouter');
@@ -33,6 +33,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 // router 호출
 app.use('/', rootRouter);
-app.use('/author', authRouter);
+app.use('/auth', authRouter);
 
 app.listen(3000, ()=> console.log('Example app listening on port 3000'));

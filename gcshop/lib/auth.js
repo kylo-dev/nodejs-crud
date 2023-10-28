@@ -1,6 +1,6 @@
 // 컴퓨터공학과 201935247 김현겸
 
-var db = require('/db');
+var db = require('./db');
 
 module.exports = {
     login : (req, res)=>{
@@ -18,6 +18,7 @@ module.exports = {
         var post = req.body;
 
         db.query('select count(*) as num from person where loginid = ? and password = ?', [post.id, post.pwd], (error, results)=>{
+            if(error){return error; }
             if(results[0].num === 1){
                 db.query('select name, class from person where loginid = ? and password = ?', [post.id, post.pwd], (error, result)=>{
                     req.session.is_logined = true;
@@ -30,8 +31,8 @@ module.exports = {
                 req.session.is_logined =false;
                 req.session.name = '손님';
                 req.session.class = '99';
-                //== 로그인 안될 시 메시지 창 보여주기 ==//
-                res.redirect('/');
+                res.send("<script>alert('회원 정보가 존재하지 않습니다.'); window.location.href = '/auth/login';</script>");
+                // res.redirect('/');
             }
         });
     },

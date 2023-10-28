@@ -1,5 +1,5 @@
 {
-  "name": "w06",
+  "name": "gcshop",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -12,6 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express-mysql-session": "^3.0.0",
+    "express-session": "^1.17.3",
+    "mysql": "^2.18.1",
     "sanitize-html": "^2.11.0"
   }
 }
