@@ -63,7 +63,7 @@ module.exports = {
 
     create : (req, res) => {
         if(req.session.class !== '00'){
-            res.end(`<script type='text/javascript' charset="utf-8">
+            res.end(`<script type='text/javascript'>
             alert("You do not have access.");
             setTimeout("location.href='http://localhost:3000/'", 1000);
             </script>`);
@@ -88,7 +88,7 @@ module.exports = {
 
     update : (req, res) => {
         if(req.session.class !== '00'){
-            res.end(`<script type='text/javascript' charset="utf-8">
+            res.end(`<script type='text/javascript'>
             alert("You do not have access.");
             setTimeout("location.href='http://localhost:3000/'", 1000);
             </script>`);
@@ -118,7 +118,7 @@ module.exports = {
     delete_process : (req, res) => {
         // 관리자(00)을 제외하고는 삭제할 수 없음
         if(req.session.class !== '00'){
-            res.end(`<script type='text/javascript' charset="utf-8">
+            res.end(`<script type='text/javascript'>
             alert("You do not have permission to delete.");
             setTimeout("location.href='http://localhost:3000/'", 1000);
             </script>`);
