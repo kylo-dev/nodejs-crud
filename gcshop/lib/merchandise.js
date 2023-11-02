@@ -11,42 +11,49 @@ function authIsOwner(req, res) {
 
 module.exports = {
     view : (req, res) =>{
+        if(req.session.class !== '00'){
+            res.end(`<script type='text/javascript' charset="utf-8">
+            alert("You do not have access.");
+            setTimeout("location.href='http://localhost:3000/'", 1000);
+            </script>`);
+            return;
+        }
         var param = req.params.vu;
 
         db.query('select count(*) as merCount from merchandise', (err, result)=>{
             db.query('select * from merchandise', (err, results)=>{
                 // 로그인 여부 확인
-                var isOwner = authIsOwner(req, res);
+                // var isOwner = authIsOwner(req, res);
 
                 // merchandise 테이블에 데이터가 있는지
                 if (result[0].merCount == 0){
                     haveMerchandise = false;
-                } else{
-                    haveMerchandise = true;
                 }
-
-                if(isOwner){
-                    var context = {
-                        menu: 'menuForManager.ejs',
-                        who: req.session.name,
-                        body: 'merchandise.ejs',
-                        logined: 'YES',
-                        haveMerchandise: haveMerchandise,
-                        list: results,
-                        check: param
-                    };
-                } else {
-                    var context = {
-                        menu: 'menuForCustomer.ejs',
-                        who: 손님,
-                        body: 'merchandise.ejs',
-                        logined: 'No',
-                        haveMerchandise: haveMerchandise,
-                        list: results,
-                        check: param
-                    };
-                }
-                
+                haveMerchandise = true;
+            
+                // if(isOwner){
+                //     var context = {
+                //         menu: 'menuForManager.ejs',
+                //         who: req.session.name,
+                //         body: 'merchandise.ejs',
+                //         logined: 'YES',
+                //         haveMerchandise: haveMerchandise,
+                //         list: results,
+                //         check: param
+                //     };
+                // } else {
+                //     res.redirect('/');
+                //     return;
+                // }
+                var context = {
+                    menu: 'menuForManager.ejs',
+                    who: req.session.name,
+                    body: 'merchandise.ejs',
+                    logined: 'YES',
+                    haveMerchandise: haveMerchandise,
+                    list: results,
+                    check: param
+                };
                 req.app.render('home', context, (err, html)=>{
                     res.end(html);
                 });
@@ -55,23 +62,21 @@ module.exports = {
     },
 
     create : (req, res) => {
-        var isOwner = authIsOwner(req, res);
-        if(isOwner){
-            var context = {
-                menu: 'menuForManager.ejs',
-                who: req.session.name,
-                body: 'merchandiseCU.ejs',
-                logined: 'YES',
-                check: 'c'
-            };
-        } else{
-            var context = {
-                menu: 'menuForCustomer.ejs',
-                who: '손님',
-                body: 'items.ejs',
-                logined: 'YES',
-            };
+        if(req.session.class !== '00'){
+            res.end(`<script type='text/javascript' charset="utf-8">
+            alert("You do not have access.");
+            setTimeout("location.href='http://localhost:3000/'", 1000);
+            </script>`);
+            return;
         }
+        var context = {
+            menu: 'menuForManager.ejs',
+            who: req.session.name,
+            body: 'merchandiseCU.ejs',
+            logined: 'YES',
+            check: 'c'
+        };
+
         req.app.render('home', context, (err, html)=>{
             res.end(html);
         });
@@ -82,57 +87,28 @@ module.exports = {
     },
 
     update : (req, res) => {
+        if(req.session.class !== '00'){
+            res.end(`<script type='text/javascript' charset="utf-8">
+            alert("You do not have access.");
+            setTimeout("location.href='http://localhost:3000/'", 1000);
+            </script>`);
+            return;
+        }
+
         var id = req.params.merId;
-
-        db.query('select count(*) as merCount from merchandise', (err, result)=>{
-            db.query(`select * from merchandise where mer_id=?`, [id],(err2, results)=>{
-                // 로그인 여부 확인
-                var isOwner = authIsOwner(req, res);
-
-                // merchandise 테이블에 데이터가 있는지
-                if (result[0].merCount == 0){
-                    haveMerchandise = false;
-                } else{
-                    haveMerchandise = true;
-                }
-
-                if(isOwner){
-                    var context = {
-                        menu: 'menuForManager.ejs',
-                        who: req.session.name,
-                        body: 'merchandiseCU.ejs',
-                        logined: 'YES',
-                        haveMerchandise: haveMerchandise,
-                        list: results,
-                        check: 'u'
-                    };
-                } else {
-                    var context = {
-                        menu: 'menuForCustomer.ejs',
-                        who: 손님,
-                        body: 'items.ejs',
-                        logined: 'No',
-                    };
-                }
-                req.app.render('home', context, (error, html)=>{
-                    res.end(html);
-                });
+        db.query(`select * from merchandise where mer_id=?`, [id],(err2, result)=>{
+            var context = {
+                menu: 'menuForManager.ejs',
+                who: req.session.name,
+                body: 'merchandiseCU.ejs',
+                logined: 'YES',
+                list: result,
+                check: 'u'
+            };
+            req.app.render('home', context, (error, html)=>{
+                res.end(html);
             });
         });
-        
-        // db.query(`select * from merchandise where mer_id = ?`, [id], (error, result)=>{
-        //     var context = {
-        //         menu: 'menuForManager.ejs',
-        //         who: req.session.name,
-        //         body: 'merchandiseCU.ejs',
-        //         logined: 'YES',
-        //         list: result,
-        //         check: 'u'
-        //     };
-        //     req.app.render('home', context, (err, html)=>{
-        //         res.end(html);
-        //     });
-        // });
     },
 
     update_process : (req, res) => {
@@ -140,6 +116,18 @@ module.exports = {
     },
 
     delete_process : (req, res) => {
-
+        // 관리자(00)을 제외하고는 삭제할 수 없음
+        if(req.session.class !== '00'){
+            res.end(`<script type='text/javascript' charset="utf-8">
+            alert("You do not have permission to delete.");
+            setTimeout("location.href='http://localhost:3000/'", 1000);
+            </script>`);
+            return;
+        }
+        id = req.params.merId;
+        db.query(`delete from merchandise where mer_id=?`,[id], (error, result)=>{
+            res.writeHead(302, {Location: '/'});
+            res.end();
+        });
     }
 }
