@@ -23,26 +23,27 @@ router.get('/view/:vu',(req, res)=>{
 
 router.get('/create',(req,res)=>{
     merchandise.create(req,res);
-})
+});
 
 router.post('/create_process',upload.single('uploadFile'),(req,res)=>{
     var file = '/images/' + req.file.filename
     merchandise.create_process(req,res,file);
-})
+});
 
 router.get('/update/:merId',(req,res)=>{
     merchandise.update(req,res);
-})
+});
+
 router.post('/update_process',upload.single('uploadFile'),(req,res)=>{
     var file = ''
     if(req.file === undefined) {file = 'No'}
     else file = '/images/' + req.file.filename
-    console.log(file)
+    console.log(file);
     merchandise.update_process(req,res,file);
-})
+});
 
 router.get('/delete/:merId',(req,res)=>{
     merchandise.delete_process(req,res);
-})
+});
 
 module.exports = router;

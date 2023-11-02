@@ -1,4 +1,6 @@
-<% if (haveMerchandise) { %>
+<% if (haveMerchandise) { 
+    if(check === 'v') { %>
+
     <table class="table table-bordered ">
 
         <% var i = 0
@@ -12,7 +14,24 @@
         <% i += 1 } %>
     
     </table>
-<% } else { %>
+<% } else if(check === 'u') { %>
+    <table class="table table-bordered ">
+
+        <% var i = 0
+             while (i<list.length) { %>
+                <tr>
+                    <td><img src="<%=list[i].image%>" style="width:100px;height:100px; "></td>
+                    <td><%=list[i].name%></td>
+                    <td>가격 : <%=list[i].price%></td>
+                    <td>브랜드 : <%=list[i].brand%></td>
+                    <td><a href="/merchandise/update/<%=list[i].mer_id %>">수정</a></td>
+                    <td><a href="/merchandise/delete/<%=list[i].mer_id %>">삭제</a></td>
+                </tr>
+        <% i += 1 } %>
+    
+    </table>
+    <% } }
+else { %>
     <table class="table table-bordered">
         <tr>
             <td>자료 없음</td>

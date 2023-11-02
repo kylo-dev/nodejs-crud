@@ -9,7 +9,7 @@ module.exports = {
             who : '손님',
             body : 'login.ejs',
             logined : 'NO',
-            haveMerchandise : req.session.merchanCount
+            check: 'v'
         };
         req.app.render('home', context, (err, html)=>{
             res.end(html);
