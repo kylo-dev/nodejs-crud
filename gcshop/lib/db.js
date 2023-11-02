@@ -1,3 +1,4 @@
+// 컴퓨터공학과 201935247 김현겸
 var mysql = require('mysql');
 var db = mysql.createConnection({
     host : 'localhost',
