@@ -8,7 +8,8 @@ module.exports = {
             menu : 'menuForCustomer.ejs',
             who : '손님',
             body : 'login.ejs',
-            logined : 'NO'
+            logined : 'NO',
+            haveMerchandise : req.session.merchanCount
         };
         req.app.render('home', context, (err, html)=>{
             res.end(html);
@@ -19,6 +20,7 @@ module.exports = {
 
         db.query('select count(*) as num from person where loginid = ? and password = ?', [post.id, post.pwd], (error, results)=>{
             if(error){return error; }
+            
             if(results[0].num === 1){
                 db.query('select name, class from person where loginid = ? and password = ?', [post.id, post.pwd], (error, result)=>{
                     req.session.is_logined = true;

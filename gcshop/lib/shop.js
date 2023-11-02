@@ -11,41 +11,62 @@ function authIsOwner(req, res) {
 
 module.exports = {
     home : (req, res)=>{
-        var isOwner = authIsOwner(req, res);
-        if(isOwner){
-            if(req.session.class === '00'){
-                var context = {
-                    menu: 'menuForManager.ejs',
-                    who: req.session.name,
-                    body: 'items.ejs'
-                };
-            }
-            else if(req.session.class === '01'){
-                var context = {
-                    menu: 'menuForCustomer.ejs',
-                    who: req.session.name,
-                    body: 'items.ejs'
-                };
-            }
-            else if(req.session.class === '02'){
-                var context = {
-                    menu: 'menuForCustomer.ejs',
-                    who: req.session.name,
-                    body: 'items.ejs',
-                    logined: 'YES'
-                };
-            }
-        }
-        else{
-            var context = {
-                menu: 'menuForCustomer.ejs',
-                who: '손님',
-                body: 'items.ejs',
-                logined: 'NO'
-            };
-        }
-        req.app.render('home', context, (err, html)=>{
-            res.end(html);
-        });
+        db.query('select count(*) as merCount from merchandise', (err, result)=>{
+            db.query('select * from merchandise', (err2, results)=>{
+                var isOwner = authIsOwner(req, res);
+                    // merchandise 데이터 있는지 확인
+                    if (result[0].merCount == 0){
+                        req.session.merchanCount = false;
+                    } else{
+                        req.session.merchanCount = true;
+                    }
+
+                    if(isOwner){
+                        if(req.session.class === '00'){
+                            var context = {
+                                menu: 'menuForManager.ejs',
+                                who: req.session.name,
+                                body: 'merchandise.ejs',
+                                logined: 'YES',
+                                haveMerchandise: req.session.merchanCount,
+                                list: results
+                            };
+                        }
+                        else if(req.session.class === '01'){
+                            var context = {
+                                menu: 'menuForCustomer.ejs',
+                                who: req.session.name,
+                                body: 'merchandise.ejs',
+                                logined: 'YES',
+                                haveMerchandise: req.session.merchanCount,
+                                list: results
+                            };
+                        }
+                        else if(req.session.class === '02'){
+                            var context = {
+                                menu: 'menuForCustomer.ejs',
+                                who: req.session.name,
+                                body: 'merchandise.ejs',
+                                logined: 'YES',
+                                haveMerchandise: req.session.merchanCount,
+                                list: results
+                            };
+                        }
+                    }
+                    else{
+                        var context = {
+                            menu: 'menuForCustomer.ejs',
+                            who: '손님',
+                            body: 'merchandise.ejs',
+                            logined: 'NO',
+                            haveMerchandise: req.session.merchanCount,
+                            list: results
+                        };
+                    }
+                    req.app.render('home', context, (err, html)=>{
+                        res.end(html);
+                    });
+                });
+         });
     },
 }
