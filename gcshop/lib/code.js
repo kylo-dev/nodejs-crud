@@ -1,6 +1,7 @@
 // 컴퓨터공학과 201935247 김현겸
 
 var db = require('./db');
+var sanitizeHtml = require('sanitize-html');
 
 function authIsOwner(req, res) {
     if(req.session.is_logined){
@@ -75,7 +76,22 @@ module.exports = {
     },
 
     create_process : (req, res)=> {
+        var post = req.body;
+        mainId = sanitizeHtml(post.main_id);
+        mainName = sanitizeHtml(post.main_name);
+        subId = sanitizeHtml(post.sub_id);
+        subName = sanitizeHtml(post.sub_name);
+        start = sanitizeHtml(post.start);
+        end = sanitizeHtml(post.end);
 
+        db.query(`insert into code_tbl values(?,?,?,?,?,?)`,
+            [mainId,subId,mainName, subName,start,end], (err, result)=>{
+                if(err){
+                    throw err;
+                }
+                res.writeHead(302, {Location: `/code/view/v`});
+                res.end();
+            });
     },
 
     update : (req, res)=>{
@@ -102,10 +118,27 @@ module.exports = {
     },
 
     update_process : (req, res)=>{
-
+        var post = req.body;
+        mainName = sanitizeHtml(post.main_name);
+        subName = sanitizeHtml(post.sub_name);
+        start = sanitizeHtml(post.start);
+        end = sanitizeHtml(post.end);
+        db.query(`update code_tbl set main_name=?, sub_name=?, start=?, end=? where main_id=? and sub_id=?`,
+            [mainName,subName, start, end, post.main_id, post.sub_id], (err, result)=>{
+                res.writeHead(302, {Location: `/code/view/v`});
+                res.end();
+            });
     },
 
     delete_process : (req, res)=> {
-
+        if(!checkSessionClass(req, res)){
+            return;
+        }
+        var mainId = req.params.main;
+        var subId = req.params.sub;
+        db.query(`delete from code_tbl where main_id=? and sub_id=?`,[mainId,subId], (err, result)=>{
+            res.writeHead(302, {Location: '/'});
+            res.end();
+        });
     }
 }

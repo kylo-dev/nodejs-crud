@@ -30,7 +30,9 @@
   </form>
   <% } else if(check === 'u') { %>
 	<h2>코드 수정</h2>
-	<form action="/code/create_process" method="post" >
+	<form action="/code/update_process" method="post" >
+		<input type="hidden" name="main_id" value="<%=list[0].main_id %>">
+		<input type="hidden" name="sub_id" value="<%=list[0].sub_id %>">
         <div class="mb-3">
 			<label class="form-label" for="main_name">대분류명</label> 
 			<input class="form-control" type="text" value="<%=list[0].main_name%>" name="main_name" style = "width:300px;" />
