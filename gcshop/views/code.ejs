@@ -34,8 +34,8 @@
                     <td><%=list[i].sub_name%></td>
                     <td><%=list[i].start%></td>
                     <td><%=list[i].end%></td>
-                    <td><a href="/merchandise/update/<%=list[i].mer_id %>">수정</a></td>
-                    <td><a href="/merchandise/delete/<%=list[i].mer_id %>" onclick="if(confirm('정말로 삭제하시겠습니까?')==false){return false; }">삭제</a></td>
+                    <td><a href="/code/update/<%=list[i].main_id %>/<%=list[i].sub_id %>">수정</a></td>
+                    <td><a href="/code/delete/<%=list[i].main_id %>/<%=list[i].sub_id %>" onclick="if(confirm('정말로 삭제하시겠습니까?')==false){return false; }">삭제</a></td>
                 </tr>
         <% i += 1 } %>
 

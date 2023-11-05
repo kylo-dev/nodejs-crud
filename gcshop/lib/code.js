@@ -9,13 +9,25 @@ function authIsOwner(req, res) {
     return false;
 }
 
+function checkSessionClass(req, res, validClass = '00') {
+    if (req.session.class !== validClass) {
+        const script = `
+        <script type='text/javascript'>
+            alert("You do not have access.");
+            setTimeout(() => {
+                location.href='http://localhost:3000/';
+            }, 1000);
+        </script>`;
+        res.end(script);
+        return false;
+    }
+    return true;
+}
+
+
 module.exports = {
     view : (req, res)=>{
-        if(req.session.class !== '00'){
-            res.end(`<script type='text/javascript'>
-            alert("You do not have access.");
-            setTimeout("location.href='http://localhost:3000/'", 1000);
-            </script>`);
+        if(!checkSessionClass(req, res)){
             return;
         }
         var param = req.params.vu;
@@ -46,7 +58,20 @@ module.exports = {
     },
 
     create : (req, res)=>{
+        if(!checkSessionClass(req, res)){
+            return;
+        }
+        var context = {
+            menu: 'menuForManager.ejs',
+            who: req.session.name,
+            body: 'codeCU.ejs',
+            logined: 'YES',
+            check: 'c'
+        };
 
+        req.app.render('home', context, (err, html)=>{
+            res.end(html);
+        });
     },
 
     create_process : (req, res)=> {
@@ -54,7 +79,26 @@ module.exports = {
     },
 
     update : (req, res)=>{
+        if(!checkSessionClass(req, res)){
+            return;
+        }
+        var mainId = req.params.main;
+        var subId = req.params.sub;
 
+        db.query(`select * from code_tbl where main_id=? and sub_id=?`,[mainId, subId],(error, result)=>{
+            var context = {
+                menu: 'menuForManager.ejs',
+                who: req.session.name,
+                body: 'codeCU.ejs',
+                logined: 'YES',
+                list: result,
+                check: 'u'
+            };
+    
+            req.app.render('home', context, (err, html)=>{
+                res.end(html);
+            });
+        })
     },
 
     update_process : (req, res)=>{
