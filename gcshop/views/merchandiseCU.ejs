@@ -1,6 +1,5 @@
 <div class="container">	
 	<script>
-
 		function displayFileName(){
 			var fileName = $("#file").val();
 			$(".upload-name").val(fileName);
@@ -11,37 +10,40 @@
 	<h2>상품 입력</h2>
 	<form action="/merchandise/create_process" method="post" enctype="multipart/form-data">
 		<div class="mb-3">
-			<label class="form-label" for="id">카테고리</label> 
-			<select name = "category" id = "id">
-				<option value=""></option>
+			<label class="form-label" for="category">카테고리</label> 
+			<select name = "category" id = "category">
+				<% var i = 0;
+				while(i < list.length){ %>
+				<option value="<%= list[i].sub_id %>"><%= list[i].sub_name%></option>
+				<% i++; } %>
 			</select>
 		</div>
 		<div class="mb-3">
-			<label class="form-label" for="id">제품명</label> 
+			<label class="form-label" for="name">제품명</label> 
 			<input class="form-control" type="text" name="name" style = "width:300px;" />
 		</div>
 		<div class="mb-3">
-			<label class="form-label" for="id">가격</label> 
+			<label class="form-label" for="price">가격</label> 
 			<input class="form-control" type="text" name="price" style="width:300px;" />
 		</div>
 		<div class="mb-3">
-			<label class="form-label" for="id">재고</label> 
+			<label class="form-label" for="stock">재고</label> 
 			<input class="form-control" type="text" name="stock" style="width:300px;" />
 		</div>
 		<div class="mb-3">
-			<label class="form-label" for="id">브랜드</label> 
+			<label class="form-label" for="brand">브랜드</label> 
 			<input class="form-control" type="text" name="brand" style="width:300px;" />
 		</div>
 		<div class="mb-3">
-			<label class="form-label" for="id">공급자</label> 
+			<label class="form-label" for="supplier">공급자</label> 
 			<input class="form-control" type="text" name="supplier" style="width:300px;" />
 		</div>
 		<div class="mb-3">
-			<label class="form-label" for="id">할인여부</label> 
+			<label class="form-label" for="sale_yn">할인여부</label> 
 			<input class="form-control" type="text" name="sale_yn" style="width:300px;" />
 		</div>
 		<div class="mb-3">
-			<label class="form-label" for="id">할인가격</label> 
+			<label class="form-label" for="sale_price">할인가격</label> 
 			<input class="form-control" type="text" name="sale_price" style="width:300px;" />
 		</div>
 
@@ -61,31 +63,31 @@
 			</select>
 		</div>
 		<div class="mb-3">
-			<label class="form-label" for="id">제품명</label> 
+			<label class="form-label" for="name">제품명</label> 
 			<input class="form-control" type="text" value="<%=list[0].name%>" name="name" style = "width:300px;" />
 		</div>
 		<div class="mb-3">
-			<label class="form-label" for="id">가격</label> 
+			<label class="form-label" for="price">가격</label> 
 			<input class="form-control" type="text" value="<%=list[0].price%>" name="price" style="width:300px;" />
 		</div>
 		<div class="mb-3">
-			<label class="form-label" for="id">재고</label> 
+			<label class="form-label" for="stock">재고</label> 
 			<input class="form-control" type="text" value="<%=list[0].stock%>" name="stock" style="width:300px;" />
 		</div>
 		<div class="mb-3">
-			<label class="form-label" for="id">브랜드</label> 
+			<label class="form-label" for="brand">브랜드</label> 
 			<input class="form-control" type="text" value="<%=list[0].brand%>" name="brand" style="width:300px;" />
 		</div>
 		<div class="mb-3">
-			<label class="form-label" for="id">공급자</label> 
+			<label class="form-label" for="supplier">공급자</label> 
 			<input class="form-control" type="text" value="<%=list[0].supplier%>" name="supplier" style="width:300px;" />
 		</div>
 		<div class="mb-3">
-			<label class="form-label" for="id">할인여부</label> 
+			<label class="form-label" for="sale_yn">할인여부</label> 
 			<input class="form-control" type="text" value="<%=list[0].sale_yn%>" name="sale_yn" style="width:300px;" />
 		</div>
 		<div class="mb-3">
-			<label class="form-label" for="id">할인가격</label> 
+			<label class="form-label" for="sale_price">할인가격</label> 
 			<input class="form-control" type="text" value="<%=list[0].sale_price%>" name="sale_price" style="width:300px;" />
 		</div>
 

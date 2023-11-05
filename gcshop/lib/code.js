@@ -3,13 +3,6 @@
 var db = require('./db');
 var sanitizeHtml = require('sanitize-html');
 
-function authIsOwner(req, res) {
-    if(req.session.is_logined){
-        return true;
-    }
-    return false;
-}
-
 function checkSessionClass(req, res, validClass = '00') {
     if (req.session.class !== validClass) {
         const script = `

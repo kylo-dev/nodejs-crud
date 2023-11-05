@@ -17,9 +17,8 @@ module.exports = {
                     // merchandise 데이터 있는지 확인
                 if (result[0].merCount == 0){
                     haveMerchandise = false;
-                } else{
-                    haveMerchandise = true;
                 }
+                haveMerchandise = true;
 
                 if(isOwner){
                     if(req.session.class === '00'){
