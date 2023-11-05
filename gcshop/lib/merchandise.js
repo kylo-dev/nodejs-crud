@@ -95,24 +95,42 @@ module.exports = {
         if(!checkSessionClass(req, res)){
             return;
         }
-
         var id = req.params.merId;
         db.query(`select * from merchandise where mer_id=?`, [id],(err2, result)=>{
-            var context = {
-                menu: 'menuForManager.ejs',
-                who: req.session.name,
-                body: 'merchandiseCU.ejs',
-                logined: 'YES',
-                list: result,
-                check: 'u'
-            };
-            req.app.render('home', context, (error, html)=>{
-                res.end(html);
+            db.query('select * from code_tbl', (err, results)=>{
+                var context = {
+                    menu: 'menuForManager.ejs',
+                    who: req.session.name,
+                    body: 'merchandiseCU.ejs',
+                    logined: 'YES',
+                    list: result,
+                    code: results,
+                    check: 'u'
+                };
+                req.app.render('home', context, (error, html)=>{
+                    res.end(html);
+                });
             });
         });
     },
 
     update_process : (req, res) => {
+        var imgFile = '/images/' + req.file.filename;
+        var post = req.body;
+
+        category = sanitizeHtml(post.category);
+        Pname = sanitizeHtml(post.name);
+        price = sanitizeHtml(post.price);
+        stock = sanitizeHtml(post.stock);
+        brand = sanitizeHtml(post.brand);
+        supplier = sanitizeHtml(post.supplier);
+        saleYn = sanitizeHtml(post.sale_yn);
+        salePrice = sanitizeHtml(post.sale_price);
+        db.query(`update merchandise set category=?, name=?, price=?, stock=?, brand=?, supplier=?,image=?,sale_yn=?,sale_price=? where mer_id=?`,
+            [category, Pname, price, stock, brand, supplier, imgFile, saleYn, salePrice, post.mer_id], (err, result)=>{
+                res.writeHead(302, {Location: `/merchandise/view/v`});
+                res.end();
+            })
 
     },
 
