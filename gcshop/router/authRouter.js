@@ -20,4 +20,8 @@ router.get('/join', (req, res)=>{
     auth.join(req, res);
 });
 
+router.post('/join_process', (req, res)=>{
+    auth.join_process(req, res);
+});
+
 module.exports = router;
