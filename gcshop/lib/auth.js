@@ -27,7 +27,7 @@ module.exports = {
                     req.session.name = result[0].name;
                     req.session.class = result[0].class;
                     res.redirect('/');
-                })
+                });
             }
             else {
                 req.session.is_logined =false;

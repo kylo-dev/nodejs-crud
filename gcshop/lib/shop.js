@@ -14,19 +14,15 @@ module.exports = {
         db.query('select count(*) as merCount from merchandise', (err, result)=>{
             db.query('select * from merchandise', (err2, results)=>{
                 var isOwner = authIsOwner(req, res);
-                // merchandise 데이터 있는지 확인
-                if (result[0].merCount == 0){
-                    haveMerchandise = false;
-                }
-                haveMerchandise = true;
+                haveMerchandise = result[0].merCount !== 0;
 
                 if(isOwner){
                     if(req.session.class === '00'){
                         var context = {
                             menu: 'menuForManager.ejs',
                             who: req.session.name,
-                            body: 'merchandise.ejs',
                             logined: 'YES',
+                            body: 'merchandise.ejs',
                             haveMerchandise: haveMerchandise,
                             list: results,
                             check: 'v'
@@ -36,8 +32,8 @@ module.exports = {
                         var context = {
                             menu: 'menuForCustomer.ejs',
                             who: req.session.name,
-                            body: 'merchandise.ejs',
                             logined: 'YES',
+                            body: 'merchandise.ejs',
                             haveMerchandise: haveMerchandise,
                             list: results,
                             check: 'v'
@@ -47,8 +43,8 @@ module.exports = {
                         var context = {
                             menu: 'menuForCustomer.ejs',
                             who: req.session.name,
-                            body: 'merchandise.ejs',
                             logined: 'YES',
+                            body: 'merchandise.ejs',
                             haveMerchandise: haveMerchandise,
                             list: results,
                             check: 'v'
@@ -59,8 +55,8 @@ module.exports = {
                     var context = {
                         menu: 'menuForCustomer.ejs',
                         who: '손님',
-                        body: 'merchandise.ejs',
                         logined: 'NO',
+                        body: 'merchandise.ejs',
                         haveMerchandise: haveMerchandise,
                         list: results,
                         check: 'v'

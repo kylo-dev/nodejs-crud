@@ -27,11 +27,7 @@ module.exports = {
         db.query('select count(*) as personCount from person', (err, result)=>{
             db.query('select * from person', (err, results)=>{
 
-                // person 테이블에 데이터가 있는지
-                if (result[0].personCount == 0){
-                    havePerson = false;
-                }
-                havePerson = true;
+                havePerson = result[0].personCount !== 0;
 
                 var context = {
                     menu: 'menuForManager.ejs',
@@ -58,14 +54,15 @@ module.exports = {
                 body : 'personCU.ejs',
                 check: 'c'
             };
+        } else{
+            var context = {
+                menu : 'menuForManager.ejs',
+                who : req.session.name,
+                logined : 'YES',
+                body : 'personCU.ejs',
+                check: 'c'
+            };
         }
-        var context = {
-            menu : 'menuForManager.ejs',
-            who : req.session.name,
-            logined : 'YES',
-            body : 'personCU.ejs',
-            check: 'c'
-        };
         req.app.render('home', context, (err, html)=>{
             res.end(html);
         });

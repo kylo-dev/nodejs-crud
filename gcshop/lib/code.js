@@ -28,11 +28,7 @@ module.exports = {
         db.query('select count(*) as codeCount from code_tbl', (err, result)=>{
             db.query('select * from code_tbl', (err, results)=>{
 
-                // code_tbl 테이블에 데이터가 있는지
-                if (result[0].codeCount == 0){
-                    haveCode = false;
-                }
-                haveCode = true;
+                haveCode = result[0].codeCount !== 0;
 
                 var context = {
                     menu: 'menuForManager.ejs',
