@@ -1,8 +1,7 @@
+<!-- 컴퓨터공학과 201935247 김현겸-->
 <% if (haveMerchandise) { 
     if(check === 'v') { %>
-
     <table class="table table-bordered ">
-
         <% var i = 0
              while (i<list.length) { %>
                 <tr>
@@ -12,11 +11,10 @@
                     <td>브랜드 : <%=list[i].brand%></td> 
                 </tr>
         <% i += 1 } %>
-    
     </table>
+
 <% } else if(check === 'u') { %>
     <table class="table table-bordered ">
-
         <% var i = 0
              while (i<list.length) { %>
                 <tr>
@@ -28,7 +26,6 @@
                     <td><a href="/merchandise/delete/<%=list[i].mer_id %>" onclick="if(confirm('정말로 삭제하시겠습니까?')==false){return false; }">삭제</a></td>
                 </tr>
         <% i += 1 } %>
-    
     </table>
     <% } }
 else { %>
