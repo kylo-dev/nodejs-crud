@@ -1,76 +1,98 @@
-<div class="container">
-	<% if (check === 'c') { %>
+<% if (check === 'c') { %>
+<section class="bg-light">
+    <div class="container py-4">
         <h2 class="text-center fw-bold">회원가입</h2>
-        <form action="/auth/join_process" method="post" class="row justify-content-center">
-          <div class="col-md-6">
-            <div class="form-group mb-3">
-              <label for="userId" class="form-label">ID</label>
-              <input type="text" class="form-control" id="userId" name="loginid" maxlength="10">
+        <form action="/person/create_process" method="post" class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-person-circle"></i>
+                    </span>
+                    <input type="text" class="form-control" id="loginid" name="loginid" maxlength="10" placeholder="ID 4~10 Words">
+                </div>
+        
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-key-fill"></i>
+                    </span>
+                    <input type="password" class="form-control" id="password" name="password" maxlength="10" placeholder="PWD 4~10 Words">
+                </div>
+        
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-person-badge"></i>
+                    </span>
+                    <input type="text" class="form-control" id="name" name="name" maxlength="20" placeholder="NAME 3~20 Words">
+                </div>
+        
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-phone"></i>
+                    </span>
+                    <input type="text" class="form-control" id="tel" name="tel" placeholder="TEL 13 Words" maxlength="13">
+                </div>
+        
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-calendar3"></i>
+                    </span>
+                    <input type="text" class="form-control" id="birth" name="birth" placeholder="YYYYMMDD 8 Words" maxlength="8">
+                </div>
+        
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-house"></i>
+                    </span>
+                    <input type="text" class="form-control" id="address" name="address" placeholder="ADDRESS 50Words" maxlength="50">
+                </div>
+        
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">Sign in</button>
+                </div>
             </div>
-            <div class="form-group mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input type="password" class="form-control" id="password" name="password" maxlength="10">
-            </div>
-            <div class="form-group mb-3">
-              <label for="name" class="form-label">Name</label>
-              <input type="text" class="form-control" id="name" name="name" maxlength="20">
-            </div>
-            <div class="form-group mb-3">
-              <label for="tel" class="form-label">Tel</label>
-              <input type="text" class="form-control" id="tel" name="tel" placeholder="000-0000-0000" maxlength="13">
-            </div>
-            <div class="form-group mb-3">
-              <label for="birth" class="form-label">Birth</label>
-              <input type="text" class="form-control" id="birth" name="birth" placeholder="YYYYMMDD" maxlength="8">
-            </div>
-            <div class="form-group mb-3">
-              <label for="address" class="form-label">Address</label>
-              <input type="text" class="form-control" id="address" name="address" placeholder="경기도 성남시" maxlength="50">
-            </div>
-            <div class="d-grid mt-4">
-              <button type="submit" class="btn btn-primary btn-lg">Sign in</button>
-            </div>
-          </div>
         </form>
-  <% } else if(check === 'u') { %>
-	<h2 class="text-center fw-bold">회원 정보 수정</h2>
+    </div>
+</section>      
+<% } else if(check === 'u') { %>
+<div class="container">
+    <h2 class="text-center fw-bold">회원 정보 수정</h2>
     <form action="/person/update_process" method="post" class="row justify-content-center">
-      <div class="col-md-4">
-        <input type="hidden" class="form-control" value="<%=list[0].loginid%>" name="loginid">
-        <div class="form-group mb-3">
-          <label for="userId" class="form-label">ID</label>
-          <input type="text" class="form-control" id="userId" value="<%=list[0].loginid%>" name="loginid" disabled>
+        <div class="col-md-4">
+            <input type="hidden" class="form-control" value="<%=list[0].loginid%>" name="loginid">
+            <div class="form-group mb-3">
+                <label for="userId" class="form-label">ID</label>
+                <input type="text" class="form-control" id="userId" value="<%=list[0].loginid%>" name="loginid" disabled>
+            </div>
+            <div class="form-group mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" value="<%=list[0].password%>" name="password" maxlength="10">
+            </div>
+            <div class="form-group mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" value="<%=list[0].name%>" name="name" maxlength="20">
+            </div>
+            <div class="form-group mb-3">
+                <label for="tel" class="form-label">Tel</label>
+                <input type="text" class="form-control" id="tel" value="<%=list[0].tel%>" name="tel" placeholder="000-0000-0000" maxlength="13">
+            </div>
+            <div class="form-group mb-3">
+                <label for="birth" class="form-label">Birth</label>
+                <input type="text" class="form-control" id="birth" value="<%=list[0].birth%>" name="birth" placeholder="YYYYMMDD" maxlength="8">
+            </div>
+            <div class="form-group mb-3">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" class="form-control" id="address" value="<%=list[0].address%>" name="address" placeholder="경기도 성남시" maxlength="50">
+            </div>
+            <div class="form-group mb-3">
+                <label for="Uclass" class="form-label">Class</label>
+                <input type="text" class="form-control" id="Uclass" value="<%=list[0].class%>" name="Uclass" maxlength="2">
+            </div>
+            <div class="form-group mb-3">
+                <label for="point" class="form-label">Point</label>
+                <input type="text" class="form-control" id="point" value="<%=list[0].point%>" name="point">
+            </div>
+            <button class="btn btn-outline-primary btn-sm mb-3" type="submit">수정</button>
         </div>
-        <div class="form-group mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" value="<%=list[0].password%>" name="password" maxlength="10">
-        </div>
-        <div class="form-group mb-3">
-          <label for="name" class="form-label">Name</label>
-          <input type="text" class="form-control" id="name" value="<%=list[0].name%>" name="name" maxlength="20">
-        </div>
-        <div class="form-group mb-3">
-          <label for="tel" class="form-label">Tel</label>
-          <input type="text" class="form-control" id="tel" value="<%=list[0].tel%>" name="tel" placeholder="000-0000-0000" maxlength="13">
-        </div>
-        <div class="form-group mb-3">
-          <label for="birth" class="form-label">Birth</label>
-          <input type="text" class="form-control" id="birth" value="<%=list[0].birth%>" name="birth" placeholder="YYYYMMDD" maxlength="8">
-        </div>
-        <div class="form-group mb-3">
-          <label for="address" class="form-label">Address</label>
-          <input type="text" class="form-control" id="address" value="<%=list[0].address%>" name="address" placeholder="경기도 성남시" maxlength="50">
-        </div>
-        <div class="form-group mb-3">
-            <label for="Uclass" class="form-label">Class</label>
-            <input type="text" class="form-control" id="Uclass" value="<%=list[0].class%>" name="Uclass" maxlength="2">
-        </div>
-        <div class="form-group mb-3">
-            <label for="point" class="form-label">Point</label>
-            <input type="text" class="form-control" id="point" value="<%=list[0].point%>" name="point">
-        </div>
-        <button class="btn btn-outline-primary btn-sm mb-3" type="submit">수정</button>
-      </div>
     </form>
-  <% } %>
 </div>
+<% } %>

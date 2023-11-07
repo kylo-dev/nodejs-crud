@@ -14,7 +14,7 @@ module.exports = {
         db.query('select count(*) as merCount from merchandise', (err, result)=>{
             db.query('select * from merchandise', (err2, results)=>{
                 var isOwner = authIsOwner(req, res);
-                    // merchandise 데이터 있는지 확인
+                // merchandise 데이터 있는지 확인
                 if (result[0].merCount == 0){
                     haveMerchandise = false;
                 }

@@ -16,12 +16,4 @@ router.get('/logout_process', (req, res)=>{
     auth.logout_process(req, res);
 });
 
-router.get('/join', (req, res)=>{
-    auth.join(req, res);
-});
-
-router.post('/join_process', (req, res)=>{
-    auth.join_process(req, res);
-});
-
 module.exports = router;

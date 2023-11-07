@@ -18,7 +18,6 @@ function checkSessionClass(req, res, validClass = '00') {
     return true;
 }
 
-
 module.exports = {
     view : (req, res)=>{
         if(!checkSessionClass(req, res)){
