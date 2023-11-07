@@ -130,8 +130,7 @@ module.exports = {
             [category, Pname, price, stock, brand, supplier, imgFile, saleYn, salePrice, post.mer_id], (err, result)=>{
                 res.writeHead(302, {Location: `/merchandise/view/v`});
                 res.end();
-            })
-
+            });
     },
 
     delete_process : (req, res) => {

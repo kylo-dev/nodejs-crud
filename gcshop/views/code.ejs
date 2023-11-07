@@ -1,16 +1,15 @@
 <table class="table table-bordered border-primary">
-    <thead>
-        <td>대분류</td>
-        <td>대분류명</td>
-        <td>소분류</td>
-        <td>소분류명</td>
-        <td>시작일</td>
-        <td>종료일</td>
-    </thead>
 
     <% if (haveCode) { 
         if(check === 'v') { %>
-
+        <thead>
+            <td>대분류</td>
+            <td>대분류명</td>
+            <td>소분류</td>
+            <td>소분류명</td>
+            <td>시작일</td>
+            <td>종료일</td>
+        </thead>
         <% var i = 0
              while (i<list.length) { %>
                 <tr>
@@ -25,6 +24,15 @@
     
     </table>
 <% } else if(check === 'u') { %>
+        <thead>
+            <td>대분류</td>
+            <td>대분류명</td>
+            <td>소분류</td>
+            <td>소분류명</td>
+            <td>시작일</td>
+            <td>종료일</td>
+            <td colspan="2"></td>
+        </thead>
         <% var i = 0
              while (i<list.length) { %>
                 <tr>

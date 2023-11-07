@@ -29,7 +29,7 @@ module.exports = {
         db.query('select count(*) as codeCount from code_tbl', (err, result)=>{
             db.query('select * from code_tbl', (err, results)=>{
 
-                // merchandise 테이블에 데이터가 있는지
+                // code_tbl 테이블에 데이터가 있는지
                 if (result[0].codeCount == 0){
                     haveCode = false;
                 }
@@ -38,8 +38,8 @@ module.exports = {
                 var context = {
                     menu: 'menuForManager.ejs',
                     who: req.session.name,
-                    body: 'code.ejs',
                     logined: 'YES',
+                    body: 'code.ejs',
                     haveCode: haveCode,
                     list: results,
                     check: param
@@ -58,8 +58,8 @@ module.exports = {
         var context = {
             menu: 'menuForManager.ejs',
             who: req.session.name,
-            body: 'codeCU.ejs',
             logined: 'YES',
+            body: 'codeCU.ejs',
             check: 'c'
         };
 
@@ -98,8 +98,8 @@ module.exports = {
             var context = {
                 menu: 'menuForManager.ejs',
                 who: req.session.name,
-                body: 'codeCU.ejs',
                 logined: 'YES',
+                body: 'codeCU.ejs',
                 list: result,
                 check: 'u'
             };
@@ -107,7 +107,7 @@ module.exports = {
             req.app.render('home', context, (err, html)=>{
                 res.end(html);
             });
-        })
+        });
     },
 
     update_process : (req, res)=>{
@@ -130,7 +130,7 @@ module.exports = {
         var mainId = req.params.main;
         var subId = req.params.sub;
         db.query(`delete from code_tbl where main_id=? and sub_id=?`,[mainId,subId], (err, result)=>{
-            res.writeHead(302, {Location: '/'});
+            res.writeHead(302, {Location: '/code/view/u'});
             res.end();
         });
     }

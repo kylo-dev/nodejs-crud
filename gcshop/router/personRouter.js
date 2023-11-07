@@ -21,8 +21,7 @@ router.get('/update/:userId',(req,res)=>{
 });
 
 router.post('/update_process',(req,res)=>{
-
-    person.update_process(req,res,file);
+    person.update_process(req,res);
 });
 
 router.get('/delete/:userId',(req,res)=>{

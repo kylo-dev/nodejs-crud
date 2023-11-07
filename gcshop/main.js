@@ -10,7 +10,7 @@ app.set('view engine', 'ejs');
 var rootRouter = require('./router/rootRouter');
 var authRouter = require('./router/authRouter');
 var codeRouter = require('./router/codeRouter');
-// var personRouter = require('./router/personRouter');
+var personRouter = require('./router/personRouter');
 var merchandiseRouter = require('./router/merchandiseRouter')
 
 
@@ -40,7 +40,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use('/', rootRouter);
 app.use('/auth', authRouter);
 app.use('/code',codeRouter);
-// app.use('/person',personRouter);
+app.use('/person',personRouter);
 app.use('/merchandise',merchandiseRouter);
 //app.use('/board',boardRouter);
 

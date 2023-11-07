@@ -34,7 +34,6 @@ module.exports = {
                 req.session.name = '손님';
                 req.session.class = '99';
                 res.send("<script>alert('회원 정보가 존재하지 않습니다.'); window.location.href = '/auth/login';</script>");
-                // res.redirect('/');
             }
         });
     },
@@ -78,6 +77,6 @@ module.exports = {
         db.query(`insert into person values(?,?,?,?,?,?,?,?)`,
             [loginId,pwd,Uname,address,tel,birth,Uclass,point], (err2, result2)=>{
                 res.send("<script>alert('회원 가입이 완료되었습니다.'); window.location.href='/';</script>");
-            })
+            });
     }
 }

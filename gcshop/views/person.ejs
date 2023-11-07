@@ -1,0 +1,57 @@
+<table class="table table-bordered border-primary">
+
+    <% if (havePerson) { 
+        if(check === 'v') { %>
+        <thead>
+            <td>사용자명</td>
+            <td>주소</td>
+            <td>전화번호</td>
+            <td>생년월일</td>
+            <td>클래스</td>
+            <td>포인트</td>
+        </thead>
+        <% var i = 0
+             while (i<list.length) { %>
+                <tr>
+                    <td><%=list[i].name%></td>
+                    <td><%=list[i].address%></td>
+                    <td><%=list[i].tel%></td>
+                    <td><%=list[i].birth%></td>
+                    <td><%=list[i].class%></td>
+                    <td><%=list[i].point%></td>
+                </tr>
+        <% i += 1 } %>
+    
+    </table>
+<% } else if(check === 'u') { %>
+        <thead>
+            <td>사용자명</td>
+            <td>주소</td>
+            <td>전화번호</td>
+            <td>생년월일</td>
+            <td>클래스</td>
+            <td>포인트</td>
+            <td colspan="2"></td>
+        </thead>
+        <% var i = 0
+             while (i<list.length) { %>
+                <tr>
+                    <td><%=list[i].name%></td>
+                    <td><%=list[i].address%></td>
+                    <td><%=list[i].tel%></td>
+                    <td><%=list[i].birth%></td>
+                    <td><%=list[i].class%></td>
+                    <td><%=list[i].point%></td>
+                    <td><a href="/person/update/<%=list[i].loginid %>">수정</a></td>
+                    <td><a href="/person/delete/<%=list[i].loginid %>" onclick="if(confirm('정말로 삭제하시겠습니까?')==false){return false; }">삭제</a></td>
+                </tr>
+        <% i += 1 } %>
+
+    </table>
+    <% } }
+else { %>
+        <tr>
+            <td>자료 없음</td>
+        </tr>
+    </table>
+<% } %>
