@@ -1,0 +1,36 @@
+<section class="bg-light">
+  <div class="container py-4">
+    <h2 class="text-center fw-bold">회원가입</h2>
+    <form action="/auth/join_process" method="post" class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="form-group mb-3">
+          <label for="userId" class="form-label">ID</label>
+          <input type="text" class="form-control" id="userId" name="loginid">
+        </div>
+        <div class="form-group mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <div class="form-group mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" class="form-control" id="name" name="name">
+        </div>
+        <div class="form-group mb-3">
+          <label for="tel" class="form-label">Tel</label>
+          <input type="text" class="form-control" id="tel" name="tel" placeholder="000-0000-0000">
+        </div>
+        <div class="form-group mb-3">
+          <label for="birth" class="form-label">Birth</label>
+          <input type="text" class="form-control" id="birth" name="birth" placeholder="YYYYMMDD">
+        </div>
+        <div class="form-group mb-3">
+          <label for="address" class="form-label">Address</label>
+          <input type="text" class="form-control" id="address" name="address" placeholder="경기도 성남시">
+        </div>
+        <div class="d-grid mt-4">
+          <button type="submit" class="btn btn-primary btn-lg">Sign in</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>

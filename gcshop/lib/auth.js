@@ -7,9 +7,8 @@ module.exports = {
         var context = {
             menu : 'menuForCustomer.ejs',
             who : '손님',
-            body : 'login.ejs',
             logined : 'NO',
-            check: 'v'
+            body : 'login.ejs',
         };
         req.app.render('home', context, (err, html)=>{
             res.end(html);
@@ -43,4 +42,15 @@ module.exports = {
             res.redirect('/');
         });
     },
+    join : (req, res)=>{
+        var context = {
+            menu : 'menuForCustomer.ejs',
+            who : '손님',
+            logined : 'NO',
+            body : 'join.ejs',
+        };
+        req.app.render('home', context, (err, html)=>{
+            res.end(html);
+        });
+    }
 }
