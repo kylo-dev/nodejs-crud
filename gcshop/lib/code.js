@@ -24,23 +24,25 @@ module.exports = {
             return;
         }
         var param = req.params.vu;
-
-        db.query('select count(*) as codeCount from code_tbl', (err, result)=>{
-            db.query('select * from code_tbl', (err, results)=>{
-
-                haveCode = result[0].codeCount !== 0;
-
-                var context = {
-                    menu: 'menuForManager.ejs',
-                    who: req.session.name,
-                    logined: 'YES',
-                    body: 'code.ejs',
-                    haveCode: haveCode,
-                    list: results,
-                    check: param
-                };
-                req.app.render('home', context, (err, html)=>{
-                    res.end(html);
+        db.query('select * from boardtype', (error, boardtypes)=>{
+            db.query('select count(*) as codeCount from code_tbl', (err, result)=>{
+                db.query('select * from code_tbl', (err, results)=>{
+    
+                    haveCode = result[0].codeCount !== 0;
+    
+                    var context = {
+                        menu: 'menuForManager.ejs',
+                        who: req.session.name,
+                        logined: 'YES',
+                        boardtypes: boardtypes,
+                        body: 'code.ejs',
+                        haveCode: haveCode,
+                        list: results,
+                        check: param
+                    };
+                    req.app.render('home', context, (err, html)=>{
+                        res.end(html);
+                    });
                 });
             });
         });
@@ -50,16 +52,19 @@ module.exports = {
         if(!checkSessionClass(req, res)){
             return;
         }
-        var context = {
-            menu: 'menuForManager.ejs',
-            who: req.session.name,
-            logined: 'YES',
-            body: 'codeCU.ejs',
-            check: 'c'
-        };
-
-        req.app.render('home', context, (err, html)=>{
-            res.end(html);
+        db.query('select * from boardtype', (error, boardtypes)=>{
+            var context = {
+                menu: 'menuForManager.ejs',
+                who: req.session.name,
+                logined: 'YES',
+                boardtypes: boardtypes,
+                body: 'codeCU.ejs',
+                check: 'c'
+            };
+    
+            req.app.render('home', context, (err, html)=>{
+                res.end(html);
+            });
         });
     },
 
@@ -88,19 +93,21 @@ module.exports = {
         }
         var mainId = req.params.main;
         var subId = req.params.sub;
-
-        db.query(`select * from code_tbl where main_id=? and sub_id=?`,[mainId, subId],(error, result)=>{
-            var context = {
-                menu: 'menuForManager.ejs',
-                who: req.session.name,
-                logined: 'YES',
-                body: 'codeCU.ejs',
-                list: result,
-                check: 'u'
-            };
-    
-            req.app.render('home', context, (err, html)=>{
-                res.end(html);
+        db.query('select * from boardtype', (err, boardtypes)=>{
+            db.query(`select * from code_tbl where main_id=? and sub_id=?`,[mainId, subId],(error, result)=>{
+                var context = {
+                    menu: 'menuForManager.ejs',
+                    who: req.session.name,
+                    logined: 'YES',
+                    boardtypes: boardtypes,
+                    body: 'codeCU.ejs',
+                    list: result,
+                    check: 'u'
+                };
+        
+                req.app.render('home', context, (err, html)=>{
+                    res.end(html);
+                });
             });
         });
     },

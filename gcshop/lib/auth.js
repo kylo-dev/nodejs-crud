@@ -4,14 +4,17 @@ var db = require('./db');
 
 module.exports = {
     login : (req, res)=>{
-        var context = {
-            menu : 'menuForCustomer.ejs',
-            who : '손님',
-            logined : 'NO',
-            body : 'login.ejs',
-        };
-        req.app.render('home', context, (err, html)=>{
-            res.end(html);
+        db.query('select * from boardtype', (error, boardtypes)=>{
+            var context = {
+                menu : 'menuForCustomer.ejs',
+                who : '손님',
+                logined : 'NO',
+                boardtypes: boardtypes,
+                body : 'login.ejs',
+            };
+            req.app.render('home', context, (err, html)=>{
+                res.end(html);
+            });
         });
     },
 

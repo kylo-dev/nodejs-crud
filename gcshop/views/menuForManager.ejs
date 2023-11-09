@@ -38,19 +38,20 @@
               <li><a class="dropdown-item" href="#">생활용품</a></li>
             </ul>
           </li>
-  
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               게시판
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <% var i = 0;
+                  while(i < boardtypes.length) 
+                  { %>
+                  <li><a class="dropdown-item" href="/board/view/<%=boardtypes[i].type_id%>/1"><%=boardtypes[i].title%></a></li>
+                    <% i +=1 } %>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li><a class="dropdown-item" href="#">게시판 종류</a></li>
             </ul>
           </li>
-  
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               입력
@@ -79,7 +80,6 @@
               <li><a class="dropdown-item" href="#">게시판 수정</a></li>
             </ul>
           </li>
-  
         </ul>
         <!-- 메뉴 끝 -->
   

@@ -24,47 +24,54 @@ module.exports = {
             return;
         }
         var param = req.params.vu;
-        db.query('select count(*) as personCount from person', (err, result)=>{
-            db.query('select * from person', (err, results)=>{
-
-                havePerson = result[0].personCount !== 0;
-
-                var context = {
-                    menu: 'menuForManager.ejs',
-                    who: req.session.name,
-                    logined: 'YES',
-                    body: 'person.ejs',
-                    havePerson: havePerson,
-                    list: results,
-                    check: param
-                };
-                req.app.render('home', context, (err, html)=>{
-                    res.end(html);
+        db.query('select * from boardtype', (error, boardtypes)=>{
+            db.query('select count(*) as personCount from person', (err, result)=>{
+                db.query('select * from person', (err, results)=>{
+    
+                    havePerson = result[0].personCount !== 0;
+    
+                    var context = {
+                        menu: 'menuForManager.ejs',
+                        who: req.session.name,
+                        logined: 'YES',
+                        boardtypes: boardtypes,
+                        body: 'person.ejs',
+                        havePerson: havePerson,
+                        list: results,
+                        check: param
+                    };
+                    req.app.render('home', context, (err, html)=>{
+                        res.end(html);
+                    });
                 });
             });
         });
     },
 
     create : (req,res)=>{
-        if(req.session.class !== '00'){
-            var context = {
-                menu : 'menuForCustomer.ejs',
-                who : '손님',
-                logined : 'NO',
-                body : 'personCU.ejs',
-                check: 'c'
-            };
-        } else{
-            var context = {
-                menu : 'menuForManager.ejs',
-                who : req.session.name,
-                logined : 'YES',
-                body : 'personCU.ejs',
-                check: 'c'
-            };
-        }
-        req.app.render('home', context, (err, html)=>{
-            res.end(html);
+        db.query('select * from boardtype', (err, boardtypes)=>{
+            if(req.session.class !== '00'){
+                var context = {
+                    menu : 'menuForCustomer.ejs',
+                    who : '손님',
+                    logined : 'NO',
+                    boardtypes: boardtypes,
+                    body : 'personCU.ejs',
+                    check: 'c'
+                };
+            } else{
+                var context = {
+                    menu : 'menuForManager.ejs',
+                    who : req.session.name,
+                    logined : 'YES',
+                    boardtypes: boardtypes,
+                    body : 'personCU.ejs',
+                    check: 'c'
+                };
+            }
+            req.app.render('home', context, (err, html)=>{
+                res.end(html);
+            });
         });
     },
     create_process : (req, res)=>{
@@ -98,19 +105,21 @@ module.exports = {
             return;
         }
         var loginid = req.params.userId;
-
-        db.query(`select * from person where loginid=?`,[loginid],(error, result)=>{
-            var context = {
-                menu: 'menuForManager.ejs',
-                who: req.session.name,
-                logined: 'YES',
-                body: 'personCU.ejs',
-                list: result,
-                check: 'u'
-            };
-    
-            req.app.render('home', context, (err, html)=>{
-                res.end(html);
+        db.query('select * from boardtype', (err,boardtypes)=>{
+            db.query(`select * from person where loginid=?`,[loginid],(error, result)=>{
+                var context = {
+                    menu: 'menuForManager.ejs',
+                    who: req.session.name,
+                    logined: 'YES',
+                    boardtypes: boardtypes,
+                    body: 'personCU.ejs',
+                    list: result,
+                    check: 'u'
+                };
+        
+                req.app.render('home', context, (err, html)=>{
+                    res.end(html);
+                });
             });
         });
     },

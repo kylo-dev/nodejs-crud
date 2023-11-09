@@ -24,23 +24,25 @@ module.exports = {
             return;
         }
         var param = req.params.vu;
-
-        db.query('select count(*) as merCount from merchandise', (err, result)=>{
-            db.query('select * from merchandise', (err, results)=>{
-
-                haveMerchandise = result[0].merCount !== 0;
-
-                var context = {
-                    menu: 'menuForManager.ejs',
-                    who: req.session.name,
-                    logined: 'YES',
-                    body: 'merchandise.ejs',
-                    haveMerchandise: haveMerchandise,
-                    list: results,
-                    check: param
-                };
-                req.app.render('home', context, (err, html)=>{
-                    res.end(html);
+        db.query('select * from boardtype', (error, boardtypes)=>{
+            db.query('select count(*) as merCount from merchandise', (err, result)=>{
+                db.query('select * from merchandise', (err, results)=>{
+    
+                    haveMerchandise = result[0].merCount !== 0;
+    
+                    var context = {
+                        menu: 'menuForManager.ejs',
+                        who: req.session.name,
+                        logined: 'YES',
+                        boardtypes: boardtypes,
+                        body: 'merchandise.ejs',
+                        haveMerchandise: haveMerchandise,
+                        list: results,
+                        check: param
+                    };
+                    req.app.render('home', context, (err, html)=>{
+                        res.end(html);
+                    });
                 });
             });
         });
@@ -50,20 +52,23 @@ module.exports = {
         if(!checkSessionClass(req, res)){
             return;
         }
-        db.query('select * from code_tbl', (err, results)=>{
-            if(err){ throw err; }
-
-            var context = {
-                menu: 'menuForManager.ejs',
-                who: req.session.name,
-                logined: 'YES',
-                body: 'merchandiseCU.ejs',
-                list: results,
-                check: 'c'
-            };
+        db.query('select * from boardtype', (error, boardtypes)=>{
+            db.query('select * from code_tbl', (err, results)=>{
+                if(err){ throw err; }
     
-            req.app.render('home', context, (err, html)=>{
-                res.end(html);
+                var context = {
+                    menu: 'menuForManager.ejs',
+                    who: req.session.name,
+                    logined: 'YES',
+                    boardtypes: boardtypes,
+                    body: 'merchandiseCU.ejs',
+                    list: results,
+                    check: 'c'
+                };
+        
+                req.app.render('home', context, (err, html)=>{
+                    res.end(html);
+                });
             });
         });
     },
@@ -94,19 +99,22 @@ module.exports = {
             return;
         }
         var id = req.params.merId;
-        db.query(`select * from merchandise where mer_id=?`, [id],(err2, result)=>{
-            db.query('select * from code_tbl', (err, results)=>{
-                var context = {
-                    menu: 'menuForManager.ejs',
-                    who: req.session.name,
-                    body: 'merchandiseCU.ejs',
-                    logined: 'YES',
-                    list: result,
-                    code: results,
-                    check: 'u'
-                };
-                req.app.render('home', context, (error, html)=>{
-                    res.end(html);
+        db.query('select * from boardtype', (error, boardtypes)=>{
+            db.query(`select * from merchandise where mer_id=?`, [id],(err2, result)=>{
+                db.query('select * from code_tbl', (err, results)=>{
+                    var context = {
+                        menu: 'menuForManager.ejs',
+                        who: req.session.name,
+                        logined: 'YES',
+                        boardtypes,boardtypes,
+                        body: 'merchandiseCU.ejs',
+                        list: result,
+                        code: results,
+                        check: 'u'
+                    };
+                    req.app.render('home', context, (error, html)=>{
+                        res.end(html);
+                    });
                 });
             });
         });

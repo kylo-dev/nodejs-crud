@@ -4,7 +4,8 @@ var db = mysql.createConnection({
     host : 'localhost',
     user : 'root',
     password : 'root',
-    database : 'webdb2023'
+    database : 'webdb2023',
+    multipleStatements: true
 });
 db.connect();
 
