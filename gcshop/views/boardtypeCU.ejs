@@ -43,22 +43,22 @@
     <% } else { %>
     <h2>게시판 수정</h2>
     <form action="/board/type/update_process" method="post" >
-        <input type="hidden"  name="type_id" value = "<%=boardtype[0].type_id%>" />
+        <input type="hidden"  name="type_id" value = "<%=list[0].type_id%>" />
 		<div class="mb-3">
 			<label class="form-label" for="id">제목</label> 
-			<input class="form-control" type="text" name="title" value = "<%-boardtype[0].title%>" style = "width:300px;" />
+			<input class="form-control" type="text" name="title" value = "<%=list[0].title%>" style = "width:300px;" />
 		</div>
         <div class="mb-3">
 			<label class="form-label" for="id">설명</label> 
-			<input class="form-control" type="text" name="description" value = "<%=boardtype[0].description%>" style = "width:300px;" />
+			<input class="form-control" type="text" name="description" value = "<%=list[0].description%>" style = "width:300px;" />
 		</div>
         <div class="mb-3">
 			<label class="form-label" for="id">페이지당 보여지는 글 수 </label> 
-			<input class="form-control" type="text" name="numPerPage" value = "<%=boardtype[0].numPerPage%>" style = "width:300px;" />
+			<input class="form-control" type="text" name="numPerPage" value = "<%=list[0].numPerPage%>" style = "width:300px;" />
 		</div>
         <%  var checkedY = '';
             var checkedN = '';
-            if(boardtype[0].write_YN === 'Y') {checkedY = 'checked'}
+            if(list[0].write_YN === 'Y') {checkedY = 'checked'}
             else {checkedN = 'checked'} %>
          
         <label class="form-label" >일반 사용자 쓰기 가능 여부 </label>
@@ -75,7 +75,7 @@
 
         <%  var checkedY = '';
         var checkedN = '';
-        if(boardtype[0].re_YN === 'Y') {checkedY = 'checked'}
+        if(list[0].re_YN === 'Y') {checkedY = 'checked'}
         else {checkedN = 'checked'} %>
 
         <label class="form-label" for="id">댓글 가능 여부</label> 

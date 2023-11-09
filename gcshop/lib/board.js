@@ -82,13 +82,54 @@ module.exports = {
             });
     },
     typeupdate : (req, res)=>{
-
+        if(!checkSessionClass(req, res)){
+            return;
+        }
+        var typeId = req.params.typeId;
+        db.query('select * from boardtype', (err, boardtypes)=>{
+            db.query(`select * from boardtype where type_id=?`,[typeId],(error, result)=>{
+                var context = {
+                    menu: 'menuForManager.ejs',
+                    who: req.session.name,
+                    logined: 'YES',
+                    boardtypes: boardtypes,
+                    body: 'boardtypeCU.ejs',
+                    list: result,
+                    check: 'u'
+                };
+                req.app.render('home', context, (err, html)=>{
+                    res.end(html);
+                });
+            });
+        });
     },
     typeupdate_process: (req, res)=>{
+        var post = req.body;
+        typeId = sanitizeHtml(post.type_id);
+        title = sanitizeHtml(post.title);
+        description = sanitizeHtml(post.description);
+        numPerPage = sanitizeHtml(post.numPerPage);
+        writeYN = sanitizeHtml(post.write_YN);
+        reYN = sanitizeHtml(post.re_YN);
 
+        db.query(`update boardtype set title=?,description=?,write_YN=?,re_YN=?,numPerPage=? where type_id=?`,
+            [title, description, writeYN, reYN, numPerPage, typeId], (err, result)=>{
+                if(err){
+                    throw err;
+                }
+                res.writeHead(302, {Location: `/board/type/view`});
+                res.end();
+            });
     },
     typedelete_process : (req, res)=>{
-
+        if(!checkSessionClass(req, res)){
+            return;
+        }
+        var typeId = req.params.typeId;
+        db.query(`delete from boardtype where type_id=?`,[typeId], (err, result)=>{
+            res.writeHead(302, {Location: '/board/type/view'});
+            res.end();
+        });
     }
 
 }
