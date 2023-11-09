@@ -1,0 +1,33 @@
+<!--컴퓨터공학과 201935247 김현겸-->
+<div class="container">
+    <h2><%=typeName %></h2>
+    <table class="table table-bordered border-primary">
+        <% if (haveBoard) {  %>
+            <thead>
+                <td>작성자</td>
+                <td>제목</td>
+                <td>날짜</td>
+            </thead>
+            <% var i = 0
+                while (i<list.length) { %>
+                    <tr>
+                        <td><%=list[i].loginid%></td>
+                        <td><a href="/board/detail/<%=list[i].board_id %>/<%=pageNum%>"><%=list[i].title%></a></td>
+                        <td><%=list[i].date%></td>
+                    </tr>
+            <% i += 1 } %>
+        </table>
+        <% } 
+    else { %>
+            <tr>
+                <td>자료 없음</td>
+            </tr>
+        </table>
+    <% } 
+    if(writeAble){
+        if(author === '00' || typeWrite === 'Y'){ %>
+            <button type="button" class="btn btn-info me-md-2">글쓰기</button>
+        <% }
+    }
+    %>
+</div>

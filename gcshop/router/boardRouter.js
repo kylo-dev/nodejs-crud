@@ -33,16 +33,16 @@ router.get('/view/:typeId/:pNum', (req, res)=>{
     board.view(req, res);
 });
 
+router.get('/detail/:boardId/:pNum', (req, res)=>{
+    board.detail(req, res);
+});
+
 router.get('/create/:typeId', (req, res)=>{
     board.create(req, res);
 });
 
 router.post('/create_process', (req, res)=>{
     board.create_process(req, res);
-});
-
-router.get('/detail/:boardId/:pNum', (req, res)=>{
-    board.detail(req, res);
 });
 
 router.get('/update/:boardId/:typeId/:pNum', (req, res)=>{

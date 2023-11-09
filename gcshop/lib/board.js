@@ -3,6 +3,13 @@
 var db = require('./db');
 var sanitizeHtml = require('sanitize-html');
 
+function authIsOwner(req, res) {
+    if(req.session.is_logined){
+        return true;
+    }
+    return false;
+}
+
 function checkSessionClass(req, res, validClass = '00') {
     if (req.session.class !== validClass) {
         const script = `
@@ -130,6 +137,93 @@ module.exports = {
             res.writeHead(302, {Location: '/board/type/view'});
             res.end();
         });
+    },
+
+    // board controller
+    view : (req, res)=>{
+        var typeId = req.params.typeId;
+        var page = req.params.pNum;
+
+        db.query('select * from boardtype', (err, boardtypes)=>{
+            db.query('select title, write_YN from boardtype where type_id=?',[typeId], (error, typeName)=>{
+                db.query('select count(*) as boardCnt from board', (err2, result)=>{
+                    db.query('select * from board where type_id=?', [typeId], (err3, results)=>{
+                        haveBoard = result[0].boardCnt !== 0;
+                        var isOwner = authIsOwner(req, res);
+    
+                        if(isOwner){
+                            if(req.session.class === '00'){
+                                var context = {
+                                    menu: 'menuForManager.ejs',
+                                    who: req.session.name,
+                                    logined: 'YES',
+                                    boardtypes: boardtypes,
+                                    body: 'board.ejs',
+                                    haveBoard: haveBoard,
+                                    typeName: typeName[0].title,
+                                    typeWrite: typeName[0].write_YN,
+                                    writeAble : true,
+                                    author: req.session.class,
+                                    list: results,
+                                    pageNum : page
+                                };
+                            }
+                            else{
+                                var context = {
+                                    menu: 'menuForCustomer.ejs',
+                                    who: req.session.name,
+                                    logined: 'YES',
+                                    boardtypes: boardtypes,
+                                    body: 'board.ejs',
+                                    haveBoard: haveBoard,
+                                    typeName: typeName[0].title,
+                                    typeWrite: typeName[0].write_YN,
+                                    writeAble : true,
+                                    author: req.session.class,
+                                    list: results,
+                                    pageNum : page
+                                };
+                            }
+                        }
+                        else{
+                            var context = {
+                                menu: 'menuForCustomer.ejs',
+                                who: '손님',
+                                logined: 'NO',
+                                boardtypes: boardtypes,
+                                body: 'Board.ejs',
+                                haveBoard: haveBoard,
+                                typeName: typeName[0].title,
+                                typeWrite: typeName[0].write_YN,
+                                writeAble : false,
+                                author: req.session.class,
+                                list: results,
+                                pageNum: page
+                            };
+                        }
+                        req.app.render('home', context, (err4, html)=>{
+                            res.end(html);
+                        });
+                    });
+                });
+            });
+        });
+    },
+    
+    create : (req, res)=>{
+
+    },
+    create_process : (req, res)=>{
+
+    },
+    update : (req, res)=>{
+
+    },
+    update_process : (req, res)=>{
+
+    },
+    delete_process : (req, res)=>{
+
     }
 
 }
