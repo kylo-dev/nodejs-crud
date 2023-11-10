@@ -17,12 +17,22 @@
                     </tr>
             <% i += 1 } %>
         </table>
+        <% var j = 1;
+        while(j <= totalPages) {
+            if(j == pageNum){ %>
+                <span style="font-weight: bold;"><%=j%></span> &nbsp; &nbsp;
+            <% } else { %>
+                <span><a href="/board/view/<%=boardtype[0].type_id%>/<%=j%>"><%=j%></a></span> &nbsp; &nbsp;
+            <% }
+            j++;
+        } %>
         <% } 
     else { %>
             <tr>
                 <td>자료 없음</td>
             </tr>
         </table>
+
     <% }
     if(who === '손님'){
     }

@@ -145,14 +145,19 @@ module.exports = {
         var page = req.params.pNum;
 
         db.query('select * from boardtype', (err, boardtypes)=>{
-            db.query('select type_id, title, write_YN from boardtype where type_id=?',[typeId], (error, boardtype)=>{
-                db.query('select count(*) as boardCnt from board', (err2, result)=>{
+            db.query('select * from boardtype where type_id=?',[typeId], (error, boardtype)=>{
+                db.query('select count(*) as boardCnt from board where type_id=?',[typeId], (err2, result)=>{
+                    /* 페이지 기능 구현 */
+                    var numPerPage = boardtype[0].numPerPage;
+                    var offs = (page-1)*numPerPage;
+                    var totalPages = Math.ceil(result[0].boardCnt/numPerPage);
+
                     db.query(`select name, board_id, title, date from board as b
-                    join person as p on b.loginid=p.loginid where type_id=?`, [typeId], (err3, results)=>{
-                        haveBoard = result[0].boardCnt !== 0;
-                        var isOwner = authIsOwner(req, res);
+                    join person as p on b.loginid=p.loginid where type_id=?
+                    order by date desc, board_id desc LIMIT ? OFFSET ?`, [typeId, numPerPage, offs], (err3, results)=>{
+                        var haveBoard = result[0].boardCnt !== 0;
     
-                        if(isOwner){
+                        if(authIsOwner(req, res)){
                             if(req.session.class === '00'){
                                 var context = {
                                     menu: 'menuForManager.ejs',
@@ -164,7 +169,8 @@ module.exports = {
                                     boardtype: boardtype,
                                     author: req.session.class,
                                     list: results,
-                                    pageNum : page
+                                    pageNum : page,
+                                    totalPages: totalPages
                                 };
                             }
                             else{
@@ -178,7 +184,8 @@ module.exports = {
                                     boardtype: boardtype,
                                     author: req.session.class,
                                     list: results,
-                                    pageNum : page
+                                    pageNum : page,
+                                    totalPages: totalPages
                                 };
                             }
                         }
@@ -192,7 +199,8 @@ module.exports = {
                                 haveBoard: haveBoard,
                                 boardtype: boardtype,
                                 list: results,
-                                pageNum: page
+                                pageNum: page,
+                                totalPages: totalPages
                             };
                         }
                         req.app.render('home', context, (err4, html)=>{
