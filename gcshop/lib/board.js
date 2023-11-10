@@ -374,7 +374,14 @@ module.exports = {
                 });
     },
     delete_process : (req, res)=>{
-        
+        var boardId = req.params.boardId;
+        var typeId = req.params.typeId;
+        var pageNum = req.params.pNum;
+
+        db.query(`delete from board where board_id=?`,[boardId], (err, result)=>{
+            res.writeHead(302, {Location: `/board/view/${typeId}/${pageNum}`});
+            res.end();
+        });
     }
 
 }

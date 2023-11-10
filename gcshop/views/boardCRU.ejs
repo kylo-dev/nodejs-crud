@@ -22,7 +22,7 @@
   <button type="button" class="btn btn-info me-md-2"><a href="/board/view/<%=list[0].type_id%>/<%=pageNum%>">목록</a></button>
   <% if (author.class === '00' || list[0].loginid === author.userPk) { %>
 	<button type="button" class="btn btn-info me-md-2"><a href="/board/update/<%=list[0].board_id%>/<%=list[0].type_id%>/<%=pageNum%>">수정</a></button>
-	<button type="button" class="btn btn-info me-md-2"><a href="/board/delete/<%=list[0].board_id%>/<%=list[0].type_id%>/<%=pageNum%>">삭제</a></button>
+	<button type="button" class="btn btn-info me-md-2"><a href="/board/delete/<%=list[0].board_id%>/<%=list[0].type_id%>/<%=pageNum%>" onclick="if(confirm('정말로 삭제하시겠습니까?')==false){return false; }">삭제</a></button>
 	<% } %>
   </div>
 
