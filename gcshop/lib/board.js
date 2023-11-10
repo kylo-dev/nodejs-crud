@@ -145,7 +145,7 @@ module.exports = {
         var page = req.params.pNum;
 
         db.query('select * from boardtype', (err, boardtypes)=>{
-            db.query('select title, write_YN from boardtype where type_id=?',[typeId], (error, boardtype)=>{
+            db.query('select type_id, title, write_YN from boardtype where type_id=?',[typeId], (error, boardtype)=>{
                 db.query('select count(*) as boardCnt from board', (err2, result)=>{
                     db.query('select * from board where type_id=?', [typeId], (err3, results)=>{
                         haveBoard = result[0].boardCnt !== 0;
@@ -207,7 +207,7 @@ module.exports = {
         var page = req.params.pNum;
 
         db.query('select * from boardtype',(err, boardtypes)=>{
-            db.query(`select title, b.loginid, date, content, name 
+            db.query(`select board_id, type_id, title, b.loginid, date, content, name
             from board as b join person as p on b.loginid = p.loginid
             where board_id=?`,[boardId], (err2, result)=>{
 
@@ -222,6 +222,7 @@ module.exports = {
                             author: req.session,
                             list: result,
                             check: 'r', // detail 읽기 전용
+                            pageNum: page
                         };
                     }
                     else{
@@ -234,6 +235,7 @@ module.exports = {
                             author: req.session,
                             list: result,
                             check: 'r',
+                            pageNum: page
                         };
                     }
                 }
@@ -246,7 +248,8 @@ module.exports = {
                         body: 'boardCRU.ejs',
                         author: req.session,
                         list: result,
-                        check: 'r'
+                        check: 'r',
+                        pageNum: page
                     };
                 }
                 req.app.render('home', context, (error, html)=>{
@@ -257,10 +260,44 @@ module.exports = {
     },
     
     create : (req, res)=>{
+        var typeId = req.params.typeId;
 
+        db.query('select * from boardtype', (err, boardtypes)=>{
+            db.query('select type_id, title from boardtype where type_id=?',[typeId], (err2, boardtype)=>{
+                if(authIsOwner(req, res)){
+                    if(req.session.class === '00'){
+                        var context = {
+                            menu: 'menuForManager.ejs',
+                            who: req.session.name,
+                            logined: 'YES',
+                            boardtypes: boardtypes,
+                            body: 'boardCRU.ejs',
+                            check: 'c', // detail 읽기 전용
+                            boardtype: boardtype,
+                            author: req.session
+                        };
+                    }
+                    else{
+                        var context = {
+                            menu: 'menuForCustomer.ejs',
+                            who: req.session.name,
+                            logined: 'YES',
+                            boardtypes: boardtypes,
+                            body: 'boardCRU.ejs',
+                            check: 'c',
+                            boardtype: boardtype,
+                            author: req.session
+                        };
+                    }
+                }
+                req.app.render('home', context, (error, html)=>{
+                    res.end(html);
+                });
+            });
+        });
     },
     create_process : (req, res)=>{
-
+        v
     },
     update : (req, res)=>{
 

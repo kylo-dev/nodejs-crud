@@ -27,6 +27,6 @@
     if(who === '손님'){
     }
     else if(author === '00' || boardtype[0].write_YN === 'Y'){ %>
-        <button type="button" class="btn btn-info me-md-2" style="float:right;">글쓰기</button>
+        <button type="button" class="btn btn-info me-md-2" style="float:right;"><a href="/board/create/<%=boardtype[0].type_id%>">글쓰기</a></button>
     <% } %>
 </div>
