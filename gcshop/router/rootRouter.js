@@ -4,7 +4,7 @@ var router = express.Router();
 
 var shop = require('../lib/shop');
 
-router.get('/', (req, res)=>{
+router.get('/shop/:category', (req, res)=>{
     shop.home(req, res);
 });
 
