@@ -314,13 +314,67 @@ module.exports = {
             })
     },
     update : (req, res)=>{
+        var boardId = req.params.boardId;
+        var typeId = req.params.typeId;
+        var page= req.params.pNum;
+        
+        var sql1 = `select title from boardtype where type_id=${typeId};`
+        var sql2 = `select board_id, title, name, content, b.password from board as b 
+                    join person as p on b.loginid = p.loginid where board_id=${boardId};`
 
+        db.query('select * from boardtype', (err, boardtypes)=>{
+            db.query(sql1+sql2, (error, multiresult)=>{
+                if(authIsOwner(req, res)){
+                    if(req.session.class === '00'){
+                        var context = {
+                            menu: 'menuForManager.ejs',
+                            who: req.session.name,
+                            logined: 'YES',
+                            boardtypes: boardtypes,
+                            body: 'boardCRU.ejs',
+                            author: req.session,
+                            typeTitle: multiresult[0],
+                            list: multiresult[1],
+                            check: 'u', // detail 읽기 전용
+                            pageNum: page
+                        };
+                    }
+                    else{
+                        var context = {
+                            menu: 'menuForCustomer.ejs',
+                            who: req.session.name,
+                            logined: 'YES',
+                            boardtypes: boardtypes,
+                            body: 'boardCRU.ejs',
+                            author: req.session,
+                            typeTitle: multiresult[0],
+                            list: multiresult[1],
+                            check: 'u',
+                            pageNum: page
+                        };
+                    }
+                    req.app.render('home', context, (err2, html)=>{
+                        res.end(html);
+                    });
+                }
+            });
+        });
     },
     update_process : (req, res)=>{
+        var post = req.body;
+        boardId = sanitizeHtml(post.boardId);
+        pageNum = sanitizeHtml(post.pageNum);
+        title = sanitizeHtml(post.title);
+        content = sanitizeHtml(post.content);
 
+        db.query(`update board set title=?, content=? where board_id=?`,
+                [title, content, boardId],(err, result)=>{
+                    res.writeHead(302, {Location: `/board/detail/${boardId}/${pageNum}`});
+                    res.end();
+                });
     },
     delete_process : (req, res)=>{
-
+        
     }
 
 }

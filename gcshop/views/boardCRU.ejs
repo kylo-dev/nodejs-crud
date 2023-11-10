@@ -50,21 +50,21 @@
         <button class="btn btn-outline-primary btn-sm" type="submit">생성</button>
   </form>
   <% } else if(check ==='u') { %>
-	<h2>수정</h2>
+	<h2><%=typeTitle[0].title %>수정</h2>
 	<form action="/board/update_process" method="post" >
-        <input type = "hidden" name="type_id" value = "<%=btname[0].type_id%>">
-        <input type = "hidden" name="loginid" value = "<%=loginid%>">
+		<input type="hidden" name="boardId" value="<%=list[0].board_id%>">
+		<input type="hidden" name="pageNum" value="<%=pageNum%>">
 		<div class="mb-3">
 			<label class="form-label" for="id">제목</label> 
-			<input class="form-control" type="text" name="title" style = "width:300px;" />
+			<input class="form-control" type="text" name="title" value = "<%=list[0].title%>" style = "width:300px;" />
 		</div>
         <div class="mb-3">
 			<label class="form-label" for="id">작성자</label> 
-			<input class="form-control" type="text" name="title" value = "<%=who%>" style = "width:300px;" disabled/>
+			<input class="form-control" type="text" name="name" value = "<%=list[0].name%>" style = "width:300px;" disabled/>
 		</div>
         <div class="mb-3">
 			<label class="form-label" for="id">내용</label> 
-			<textarea class="form-control" name="content" style = "width:800px;height: 200px;" ></textarea>
+			<textarea class="form-control" name="content" style = "width:800px;height: 200px;" ><%=list[0].content%></textarea>
 		</div>
         <div class="mb-3">
 			<label class="form-label" for="id">갱신삭제시 비밀번호</label> 
