@@ -147,7 +147,8 @@ module.exports = {
         db.query('select * from boardtype', (err, boardtypes)=>{
             db.query('select type_id, title, write_YN from boardtype where type_id=?',[typeId], (error, boardtype)=>{
                 db.query('select count(*) as boardCnt from board', (err2, result)=>{
-                    db.query('select * from board where type_id=?', [typeId], (err3, results)=>{
+                    db.query(`select name, board_id, title, date from board as b
+                    join person as p on b.loginid=p.loginid where type_id=?`, [typeId], (err3, results)=>{
                         haveBoard = result[0].boardCnt !== 0;
                         var isOwner = authIsOwner(req, res);
     
@@ -297,7 +298,20 @@ module.exports = {
         });
     },
     create_process : (req, res)=>{
-        v
+        var post = req.body;
+
+        title = sanitizeHtml(post.title);
+        content = sanitizeHtml(post.content);
+        pwd = sanitizeHtml(post.password);
+
+        db.query(`insert into board(type_id, loginid,password,title,date,content) values(?,?,?,?,now(),?)`
+            ,[post.type_id, post.loginid, pwd, title, content], (err, result)=>{
+                if(err){
+                    throw err;
+                }
+                res.writeHead(302, {Location: `/board/view/${post.type_id}/1`});
+                res.end();
+            })
     },
     update : (req, res)=>{
 

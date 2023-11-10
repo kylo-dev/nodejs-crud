@@ -25,7 +25,7 @@ module.exports = {
             if(error){return error; }
             
             if(results[0].num === 1){
-                db.query('select name, class from person where loginid = ? and password = ?', [post.id, post.pwd], (error, result)=>{
+                db.query('select name, class, loginid from person where loginid = ? and password = ?', [post.id, post.pwd], (error, result)=>{
                     req.session.is_logined = true;
                     req.session.name = result[0].name;
                     req.session.class = result[0].class;
