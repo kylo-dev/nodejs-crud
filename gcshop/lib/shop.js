@@ -1,13 +1,9 @@
 // 컴퓨터공학과 201935247 김현겸
 
 var db = require('./db');
-const merchandise = require('./merchandise');
 
 function authIsOwner(req, res) {
-    if(req.session.is_logined){
-        return true;
-    }
-    return false;
+    return req.session.is_logined || false;
 }
 
 module.exports = {
@@ -20,33 +16,20 @@ module.exports = {
                     var haveMerchandise = result[0].merCount !== 0;
                     var context;
                     if (categoryId === 'all'){
-                        if(authIsOwner(req, res)){
-                            if(req.session.class === '00'){
-                                context = {
-                                    menu: 'menuForManager.ejs',
-                                    who: req.session.name,
-                                    logined: 'YES',
-                                    boardtypes: boardtypes,
-                                    body: 'merchandise.ejs',
-                                    haveMerchandise: haveMerchandise,
-                                    list: results,
-                                    check: 'v'
-                                };
-                            }
-                            else if(req.session.class === '01' || req.session.class === '02'){
-                                context = {
-                                    menu: 'menuForCustomer.ejs',
-                                    who: req.session.name,
-                                    logined: 'YES',
-                                    boardtypes: boardtypes,
-                                    body: 'merchandise.ejs',
-                                    haveMerchandise: haveMerchandise,
-                                    list: results,
-                                    check: 'v'
-                                };
-                            }
-                        }
-                        else{
+                        if (authIsOwner(req, res)) {
+                            // 로그인한 경우
+                            context = {
+                                menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                                who: req.session.name,
+                                logined: 'YES',
+                                boardtypes: boardtypes,
+                                body: 'merchandise.ejs',
+                                haveMerchandise: haveMerchandise,
+                                list: results,
+                                check: 'v'
+                            };
+                        } else {
+                            // 비로그인인 경우
                             context = {
                                 menu: 'menuForCustomer.ejs',
                                 who: '손님',
@@ -65,33 +48,20 @@ module.exports = {
                     else{
                         db.query(`select * from merchandise where category=?`,[categoryId], (error, merchandiseCategory)=>{
                             var haveCategory = merchandiseCategory.length > 0;
-                            if(authIsOwner(req, res)){
-                                if(req.session.class === '00'){
-                                    context = {
-                                        menu: 'menuForManager.ejs',
-                                        who: req.session.name,
-                                        logined: 'YES',
-                                        boardtypes: boardtypes,
-                                        body: 'merchandise.ejs',
-                                        haveMerchandise: haveCategory,
-                                        list: merchandiseCategory,
-                                        check: 'v'
-                                    };
-                                }
-                                else if(req.session.class === '01' || req.session.class === '02'){
-                                    context = {
-                                        menu: 'menuForCustomer.ejs',
-                                        who: req.session.name,
-                                        logined: 'YES',
-                                        boardtypes: boardtypes,
-                                        body: 'merchandise.ejs',
-                                        haveMerchandise: haveCategory,
-                                        list: merchandiseCategory,
-                                        check: 'v'
-                                    };
-                                }
-                            }
-                            else{
+                            if (authIsOwner(req, res)) {
+                                // 로그인한 경우
+                                context = {
+                                    menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                                    who: req.session.name,
+                                    logined: 'YES',
+                                    boardtypes: boardtypes,
+                                    body: 'merchandise.ejs',
+                                    haveMerchandise: haveCategory,
+                                    list: merchandiseCategory,
+                                    check: 'v'
+                                };
+                            } else {
+                                // 비로그인인 경우
                                 context = {
                                     menu: 'menuForCustomer.ejs',
                                     who: '손님',
