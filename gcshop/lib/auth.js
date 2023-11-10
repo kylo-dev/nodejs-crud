@@ -29,6 +29,7 @@ module.exports = {
                     req.session.is_logined = true;
                     req.session.name = result[0].name;
                     req.session.class = result[0].class;
+                    req.session.userPk = result[0].loginid;
                     res.redirect('/');
                 });
             }
@@ -36,6 +37,7 @@ module.exports = {
                 req.session.is_logined =false;
                 req.session.name = '손님';
                 req.session.class = '99';
+                req.session.userPk = null;
                 res.send("<script>alert('회원 정보가 존재하지 않습니다.'); window.location.href = '/auth/login';</script>");
             }
         });

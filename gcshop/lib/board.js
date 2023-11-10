@@ -207,10 +207,10 @@ module.exports = {
         var page = req.params.pNum;
 
         db.query('select * from boardtype',(err, boardtypes)=>{
-            db.query(`select title, p.loginid, date, content, name 
+            db.query(`select title, b.loginid, date, content, name 
             from board as b join person as p on b.loginid = p.loginid
             where board_id=?`,[boardId], (err2, result)=>{
-                // var isOwner = authIsOwner(req, res);
+
                 if(authIsOwner(req, res)){
                     if(req.session.class === '00'){
                         var context = {
@@ -219,9 +219,9 @@ module.exports = {
                             logined: 'YES',
                             boardtypes: boardtypes,
                             body: 'boardCRU.ejs',
-                            author: req.session.class,
+                            author: req.session,
                             list: result,
-                            check: 'r' // detail 읽기 전용
+                            check: 'r', // detail 읽기 전용
                         };
                     }
                     else{
@@ -231,9 +231,9 @@ module.exports = {
                             logined: 'YES',
                             boardtypes: boardtypes,
                             body: 'boardCRU.ejs',
-                            author: req.session.class,
+                            author: req.session,
                             list: result,
-                            check: 'r'
+                            check: 'r',
                         };
                     }
                 }
@@ -244,6 +244,7 @@ module.exports = {
                         logined: 'NO',
                         boardtypes: boardtypes,
                         body: 'boardCRU.ejs',
+                        author: req.session,
                         list: result,
                         check: 'r'
                     };

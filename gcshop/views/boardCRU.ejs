@@ -18,7 +18,14 @@
 			<textarea class="form-control" name="content" style = "width:800px;height: 200px;" disabled><%=list[0].content%></textarea>
 		</div>
   </form>
-  <button type="button" class="btn btn-info me-md-2" style="float:right;">목록</button>
+  <div style="float:right;">
+  <button type="button" class="btn btn-info me-md-2">목록</button>
+  <% if (author.class === '00' || list[0].loginid === author.userPk) { %>
+	<button type="button" class="btn btn-info me-md-2">수정</button>
+	<button type="button" class="btn btn-info me-md-2">삭제</button>
+	<% } %>
+  </div>
+
   <% } else if(check === 'c'){ %>
 	<h2>생성</h2>
 	<form action="/board/create_process" method="post" >
