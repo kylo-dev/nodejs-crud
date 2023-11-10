@@ -157,39 +157,21 @@ module.exports = {
                     order by date desc, board_id desc LIMIT ? OFFSET ?`, [typeId, numPerPage, offs], (err3, results)=>{
                         var haveBoard = result[0].boardCnt !== 0;
     
-                        if(authIsOwner(req, res)){
-                            if(req.session.class === '00'){
-                                var context = {
-                                    menu: 'menuForManager.ejs',
-                                    who: req.session.name,
-                                    logined: 'YES',
-                                    boardtypes: boardtypes,
-                                    body: 'board.ejs',
-                                    haveBoard: haveBoard,
-                                    boardtype: boardtype,
-                                    author: req.session.class,
-                                    list: results,
-                                    pageNum : page,
-                                    totalPages: totalPages
-                                };
-                            }
-                            else{
-                                var context = {
-                                    menu: 'menuForCustomer.ejs',
-                                    who: req.session.name,
-                                    logined: 'YES',
-                                    boardtypes: boardtypes,
-                                    body: 'board.ejs',
-                                    haveBoard: haveBoard,
-                                    boardtype: boardtype,
-                                    author: req.session.class,
-                                    list: results,
-                                    pageNum : page,
-                                    totalPages: totalPages
-                                };
-                            }
-                        }
-                        else{
+                        if (authIsOwner(req, res)) {
+                            var context = {
+                                menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                                who: req.session.name,
+                                logined: 'YES',
+                                boardtypes: boardtypes,
+                                body: 'board.ejs',
+                                haveBoard: haveBoard,
+                                boardtype: boardtype,
+                                author: req.session.class,
+                                list: results,
+                                pageNum: page,
+                                totalPages: totalPages
+                            };
+                        } else {
                             var context = {
                                 menu: 'menuForCustomer.ejs',
                                 who: '손님',
@@ -203,6 +185,7 @@ module.exports = {
                                 totalPages: totalPages
                             };
                         }
+
                         req.app.render('home', context, (err4, html)=>{
                             res.end(html);
                         });
@@ -220,35 +203,19 @@ module.exports = {
             from board as b join person as p on b.loginid = p.loginid
             where board_id=?`,[boardId], (err2, result)=>{
 
-                if(authIsOwner(req, res)){
-                    if(req.session.class === '00'){
-                        var context = {
-                            menu: 'menuForManager.ejs',
-                            who: req.session.name,
-                            logined: 'YES',
-                            boardtypes: boardtypes,
-                            body: 'boardCRU.ejs',
-                            author: req.session,
-                            list: result,
-                            check: 'r', // detail 읽기 전용
-                            pageNum: page
-                        };
-                    }
-                    else{
-                        var context = {
-                            menu: 'menuForCustomer.ejs',
-                            who: req.session.name,
-                            logined: 'YES',
-                            boardtypes: boardtypes,
-                            body: 'boardCRU.ejs',
-                            author: req.session,
-                            list: result,
-                            check: 'r',
-                            pageNum: page
-                        };
-                    }
-                }
-                else{
+                if (authIsOwner(req, res)) {
+                    var context = {
+                        menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                        who: req.session.name,
+                        logined: 'YES',
+                        boardtypes: boardtypes,
+                        body: 'boardCRU.ejs',
+                        author: req.session,
+                        list: result,
+                        check: 'r', // detail 읽기 전용
+                        pageNum: page
+                    };
+                } else {
                     var context = {
                         menu: 'menuForCustomer.ejs',
                         who: '손님',
@@ -261,9 +228,9 @@ module.exports = {
                         pageNum: page
                     };
                 }
-                req.app.render('home', context, (error, html)=>{
-                    res.end(html);
-                });
+            req.app.render('home', context, (error, html)=>{
+                res.end(html);
+            });
             });
         });
     },
@@ -273,32 +240,17 @@ module.exports = {
 
         db.query('select * from boardtype', (err, boardtypes)=>{
             db.query('select type_id, title from boardtype where type_id=?',[typeId], (err2, boardtype)=>{
-                if(authIsOwner(req, res)){
-                    if(req.session.class === '00'){
-                        var context = {
-                            menu: 'menuForManager.ejs',
-                            who: req.session.name,
-                            logined: 'YES',
-                            boardtypes: boardtypes,
-                            body: 'boardCRU.ejs',
-                            check: 'c', // detail 읽기 전용
-                            boardtype: boardtype,
-                            author: req.session
-                        };
-                    }
-                    else{
-                        var context = {
-                            menu: 'menuForCustomer.ejs',
-                            who: req.session.name,
-                            logined: 'YES',
-                            boardtypes: boardtypes,
-                            body: 'boardCRU.ejs',
-                            check: 'c',
-                            boardtype: boardtype,
-                            author: req.session
-                        };
-                    }
-                }
+                var context = {
+                    menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                    who: req.session.name,
+                    logined: req.session.is_logined ? 'YES' : 'NO',
+                    boardtypes: boardtypes,
+                    body: 'boardCRU.ejs',
+                    check: 'c', 
+                    boardtype: boardtype,
+                    author: req.session
+                };
+
                 req.app.render('home', context, (error, html)=>{
                     res.end(html);
                 });
@@ -321,6 +273,7 @@ module.exports = {
                 res.end();
             })
     },
+
     update : (req, res)=>{
         var boardId = req.params.boardId;
         var typeId = req.params.typeId;
@@ -331,40 +284,24 @@ module.exports = {
                     join person as p on b.loginid = p.loginid where board_id=${boardId};`
 
         db.query('select * from boardtype', (err, boardtypes)=>{
-            db.query(sql1+sql2, (error, multiresult)=>{
-                if(authIsOwner(req, res)){
-                    if(req.session.class === '00'){
-                        var context = {
-                            menu: 'menuForManager.ejs',
-                            who: req.session.name,
-                            logined: 'YES',
-                            boardtypes: boardtypes,
-                            body: 'boardCRU.ejs',
-                            author: req.session,
-                            typeTitle: multiresult[0],
-                            list: multiresult[1],
-                            check: 'u', // detail 읽기 전용
-                            pageNum: page
-                        };
-                    }
-                    else{
-                        var context = {
-                            menu: 'menuForCustomer.ejs',
-                            who: req.session.name,
-                            logined: 'YES',
-                            boardtypes: boardtypes,
-                            body: 'boardCRU.ejs',
-                            author: req.session,
-                            typeTitle: multiresult[0],
-                            list: multiresult[1],
-                            check: 'u',
-                            pageNum: page
-                        };
-                    }
-                    req.app.render('home', context, (err2, html)=>{
-                        res.end(html);
-                    });
-                }
+            db.query(sql1 + sql2, (error, multiresult)=>{
+                
+                var context = {
+                    menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                    who: req.session.name,
+                    logined: req.session.is_logined ? 'YES' : 'NO',
+                    boardtypes: boardtypes,
+                    body: 'boardCRU.ejs',
+                    author: req.session,
+                    typeTitle: multiresult[0],
+                    list: multiresult[1],
+                    check: 'u',
+                    pageNum: page
+                };
+
+                req.app.render('home', context, (err2, html)=>{
+                    res.end(html);
+                });
             });
         });
     },
@@ -381,6 +318,7 @@ module.exports = {
                     res.end();
                 });
     },
+
     delete_process : (req, res)=>{
         var boardId = req.params.boardId;
         var typeId = req.params.typeId;

@@ -16,27 +16,28 @@
                         <td><%=list[i].date%></td>
                     </tr>
             <% i += 1 } %>
-        </table>
-        <% var j = 1;
-        while(j <= totalPages) {
-            if(j == pageNum){ %>
-                <span style="font-weight: bold;"><%=j%></span> &nbsp; &nbsp;
-            <% } else { %>
-                <span><a href="/board/view/<%=boardtype[0].type_id%>/<%=j%>"><%=j%></a></span> &nbsp; &nbsp;
-            <% }
-            j++;
-        } %>
-        <% } 
-    else { %>
-            <tr>
-                <td>자료 없음</td>
-            </tr>
-        </table>
+    </table>
 
-    <% }
-    if(who === '손님'){
-    }
-    else if(author === '00' || boardtype[0].write_YN === 'Y'){ %>
-        <button type="button" class="btn btn-info me-md-2" style="float:right;"><a href="/board/create/<%=boardtype[0].type_id%>">글쓰기</a></button>
+    <% var j = 1;
+    while(j <= totalPages) {
+        if(j == pageNum){ %>
+            <span style="font-weight: bold;"><%=j%></span> &nbsp; &nbsp;
+        <% } else { %>
+            <span><a href="/board/view/<%=boardtype[0].type_id%>/<%=j%>"><%=j%></a></span> &nbsp; &nbsp;
+        <% }
+        j++;
+    } %>
+
+    <% } else { %>
+        <tr>
+            <td>자료 없음</td>
+        </tr>
+    </table>
+
+    <% } 
+    if(who !== '손님' && (author === '00' || boardtype[0].write_YN === 'Y') ){ %>
+    <button type="button" class="btn btn-info me-md-2" style="float:right;">
+        <a href="/board/create/<%=boardtype[0].type_id%>">글쓰기</a>
+    </button>
     <% } %>
 </div>

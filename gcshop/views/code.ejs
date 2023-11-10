@@ -21,37 +21,37 @@
                     <td><%=list[i].end%></td>
                 </tr>
         <% i += 1 } %>
-    
-    </table>
-<% } else if(check === 'u') { %>
-        <thead>
-            <td>대분류</td>
-            <td>대분류명</td>
-            <td>소분류</td>
-            <td>소분류명</td>
-            <td>시작일</td>
-            <td>종료일</td>
-            <td colspan="2"></td>
-        </thead>
-        <% var i = 0
-             while (i<list.length) { %>
-                <tr>
-                    <td><%=list[i].main_id%></td>
-                    <td><%=list[i].main_name%></td>
-                    <td><%=list[i].sub_id%></td>
-                    <td><%=list[i].sub_name%></td>
-                    <td><%=list[i].start%></td>
-                    <td><%=list[i].end%></td>
-                    <td><a href="/code/update/<%=list[i].main_id %>/<%=list[i].sub_id %>">수정</a></td>
-                    <td><a href="/code/delete/<%=list[i].main_id %>/<%=list[i].sub_id %>" onclick="if(confirm('정말로 삭제하시겠습니까?')==false){return false; }">삭제</a></td>
-                </tr>
-        <% i += 1 } %>
+</table>
 
-    </table>
-    <% } }
-else { %>
-        <tr>
-            <td>자료 없음</td>
-        </tr>
-    </table>
+<% } else if(check === 'u') { %>
+    <thead>
+        <td>대분류</td>
+        <td>대분류명</td>
+        <td>소분류</td>
+        <td>소분류명</td>
+        <td>시작일</td>
+        <td>종료일</td>
+        <td colspan="2"></td>
+    </thead>
+    <% var i = 0
+            while (i<list.length) { %>
+            <tr>
+                <td><%=list[i].main_id%></td>
+                <td><%=list[i].main_name%></td>
+                <td><%=list[i].sub_id%></td>
+                <td><%=list[i].sub_name%></td>
+                <td><%=list[i].start%></td>
+                <td><%=list[i].end%></td>
+                <td><a href="/code/update/<%=list[i].main_id %>/<%=list[i].sub_id %>">수정</a></td>
+                <td><a href="/code/delete/<%=list[i].main_id %>/<%=list[i].sub_id %>" onclick="if(confirm('정말로 삭제하시겠습니까?')==false){return false; }">삭제</a></td>
+            </tr>
+    <% i += 1 } %>
+
+</table>
+<% } }
+    else { %>
+    <tr>
+        <td>자료 없음</td>
+    </tr>
+</table>
 <% } %>
