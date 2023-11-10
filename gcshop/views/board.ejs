@@ -1,6 +1,6 @@
 <!--컴퓨터공학과 201935247 김현겸-->
 <div class="container">
-    <h2><%=typeName %></h2>
+    <h2><%=boardtype[0].title %></h2>
     <table class="table table-bordered border-primary">
         <% if (haveBoard) {  %>
             <thead>
@@ -23,11 +23,10 @@
                 <td>자료 없음</td>
             </tr>
         </table>
-    <% } 
-    if(writeAble){
-        if(author === '00' || typeWrite === 'Y'){ %>
-            <button type="button" class="btn btn-info me-md-2">글쓰기</button>
-        <% }
+    <% }
+    if(who === '손님'){
     }
-    %>
+    else if(author === '00' || boardtype[0].write_YN === 'Y'){ %>
+        <button type="button" class="btn btn-info me-md-2" style="float:right;">글쓰기</button>
+    <% } %>
 </div>

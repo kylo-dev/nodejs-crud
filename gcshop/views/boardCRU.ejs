@@ -1,6 +1,26 @@
 <div class="container">	
-	
-    <h2> 생성</h2>
+	<% if(check === 'r') { %>
+	<form>
+		<div class="mb-3">
+			<label class="form-label" for="id">제목</label> 
+			<input class="form-control" type="text" name="title" value="<%=list[0].title%>" style = "width:300px;" disabled/>
+		</div>
+        <div class="mb-3">
+			<label class="form-label" for="id">작성자</label> 
+			<input class="form-control" type="text" name="loginid" value="<%=list[0].name%>" style = "width:300px;" disabled/>
+		</div>
+		<div class="mb-3">
+			<label class="form-label" for="id">작성일</label> 
+			<input class="form-control" type="text" name="date" value = "<%=list[0].date%>" style = "width:300px;" disabled/>
+		</div>
+        <div class="mb-3">
+			<label class="form-label" for="id">내용</label> 
+			<textarea class="form-control" name="content" style = "width:800px;height: 200px;" disabled><%=list[0].content%></textarea>
+		</div>
+  </form>
+  <button type="button" class="btn btn-info me-md-2" style="float:right;">목록</button>
+  <% } else if(check === 'c'){ %>
+	<h2>생성</h2>
 	<form action="/board/create_process" method="post" >
         <input type = "hidden" name="type_id" value = "<%=btname[0].type_id%>">
         <input type = "hidden" name="loginid" value = "<%=loginid%>">
@@ -21,6 +41,29 @@
 			<input class="form-control" type="text" name="password" style = "width:300px;" />
 		</div>
         <button class="btn btn-outline-primary btn-sm" type="submit">생성</button>
-    
   </form>
+  <% } else if(check ==='u') { %>
+	<h2>수정</h2>
+	<form action="/board/update_process" method="post" >
+        <input type = "hidden" name="type_id" value = "<%=btname[0].type_id%>">
+        <input type = "hidden" name="loginid" value = "<%=loginid%>">
+		<div class="mb-3">
+			<label class="form-label" for="id">제목</label> 
+			<input class="form-control" type="text" name="title" style = "width:300px;" />
+		</div>
+        <div class="mb-3">
+			<label class="form-label" for="id">작성자</label> 
+			<input class="form-control" type="text" name="title" value = "<%=who%>" style = "width:300px;" disabled/>
+		</div>
+        <div class="mb-3">
+			<label class="form-label" for="id">내용</label> 
+			<textarea class="form-control" name="content" style = "width:800px;height: 200px;" ></textarea>
+		</div>
+        <div class="mb-3">
+			<label class="form-label" for="id">갱신삭제시 비밀번호</label> 
+			<input class="form-control" type="text" name="password" style = "width:300px;" />
+		</div>
+        <button class="btn btn-outline-primary btn-sm" type="submit">수정</button>
+  </form>
+  <% } %>
 </div>

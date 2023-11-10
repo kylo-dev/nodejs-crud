@@ -145,7 +145,7 @@ module.exports = {
         var page = req.params.pNum;
 
         db.query('select * from boardtype', (err, boardtypes)=>{
-            db.query('select title, write_YN from boardtype where type_id=?',[typeId], (error, typeName)=>{
+            db.query('select title, write_YN from boardtype where type_id=?',[typeId], (error, boardtype)=>{
                 db.query('select count(*) as boardCnt from board', (err2, result)=>{
                     db.query('select * from board where type_id=?', [typeId], (err3, results)=>{
                         haveBoard = result[0].boardCnt !== 0;
@@ -160,9 +160,7 @@ module.exports = {
                                     boardtypes: boardtypes,
                                     body: 'board.ejs',
                                     haveBoard: haveBoard,
-                                    typeName: typeName[0].title,
-                                    typeWrite: typeName[0].write_YN,
-                                    writeAble : true,
+                                    boardtype: boardtype,
                                     author: req.session.class,
                                     list: results,
                                     pageNum : page
@@ -176,9 +174,7 @@ module.exports = {
                                     boardtypes: boardtypes,
                                     body: 'board.ejs',
                                     haveBoard: haveBoard,
-                                    typeName: typeName[0].title,
-                                    typeWrite: typeName[0].write_YN,
-                                    writeAble : true,
+                                    boardtype: boardtype,
                                     author: req.session.class,
                                     list: results,
                                     pageNum : page
@@ -191,12 +187,9 @@ module.exports = {
                                 who: '손님',
                                 logined: 'NO',
                                 boardtypes: boardtypes,
-                                body: 'Board.ejs',
+                                body: 'board.ejs',
                                 haveBoard: haveBoard,
-                                typeName: typeName[0].title,
-                                typeWrite: typeName[0].write_YN,
-                                writeAble : false,
-                                author: req.session.class,
+                                boardtype: boardtype,
                                 list: results,
                                 pageNum: page
                             };
@@ -205,6 +198,58 @@ module.exports = {
                             res.end(html);
                         });
                     });
+                });
+            });
+        });
+    },
+    detail : (req, res)=>{
+        var boardId = req.params.boardId;
+        var page = req.params.pNum;
+
+        db.query('select * from boardtype',(err, boardtypes)=>{
+            db.query(`select title, p.loginid, date, content, name 
+            from board as b join person as p on b.loginid = p.loginid
+            where board_id=?`,[boardId], (err2, result)=>{
+                // var isOwner = authIsOwner(req, res);
+                if(authIsOwner(req, res)){
+                    if(req.session.class === '00'){
+                        var context = {
+                            menu: 'menuForManager.ejs',
+                            who: req.session.name,
+                            logined: 'YES',
+                            boardtypes: boardtypes,
+                            body: 'boardCRU.ejs',
+                            author: req.session.class,
+                            list: result,
+                            check: 'r' // detail 읽기 전용
+                        };
+                    }
+                    else{
+                        var context = {
+                            menu: 'menuForCustomer.ejs',
+                            who: req.session.name,
+                            logined: 'YES',
+                            boardtypes: boardtypes,
+                            body: 'boardCRU.ejs',
+                            author: req.session.class,
+                            list: result,
+                            check: 'r'
+                        };
+                    }
+                }
+                else{
+                    var context = {
+                        menu: 'menuForCustomer.ejs',
+                        who: '손님',
+                        logined: 'NO',
+                        boardtypes: boardtypes,
+                        body: 'boardCRU.ejs',
+                        list: result,
+                        check: 'r'
+                    };
+                }
+                req.app.render('home', context, (error, html)=>{
+                    res.end(html);
                 });
             });
         });
