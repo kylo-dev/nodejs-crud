@@ -2,12 +2,10 @@
 
 var db = require('./db');
 var sanitizeHtml = require('sanitize-html');
+const dateModule = require('./template');
 
 function authIsOwner(req, res) {
-    if(req.session.is_logined){
-        return true;
-    }
-    return false;
+    return req.session.is_logined || false;
 }
 
 function checkSessionClass(req, res, validClass = '00') {
@@ -263,9 +261,10 @@ module.exports = {
         title = sanitizeHtml(post.title);
         content = sanitizeHtml(post.content);
         pwd = sanitizeHtml(post.password);
+        const currentDate = dateModule.dateOfEightDigit();
 
-        db.query(`insert into board(type_id, loginid,password,title,date,content) values(?,?,?,?,now(),?)`
-            ,[post.type_id, post.loginid, pwd, title, content], (err, result)=>{
+        db.query(`insert into board(type_id, loginid,password,title,date,content) values(?,?,?,?,?,?)`
+            ,[post.type_id, post.loginid, pwd, title, currentDate, content], (err, result)=>{
                 if(err){
                     throw err;
                 }
