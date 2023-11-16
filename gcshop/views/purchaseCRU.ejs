@@ -1,6 +1,6 @@
 <table class="table table-bordered">
     <tr>
-        <td rowspan="5" style="width: 65%;">
+        <td rowspan="6" style="width: 65%;">
             <img src="<%=list[0].image%>" alt="Merchandise Image" style="width: 30%;">
         </td>
     </tr>
@@ -17,17 +17,19 @@
         <td>브랜드: <%=list[0].brand %></td>
     </tr>
 
-<% if (check === 'y') { %>
+    <tr>
+        <td>수량 : <input type="number"></td>
+    </tr>
+
     <tr>
         <td>
             <button class="btn btn-outline-primary btn-sm">
-                <a href="/purchase/detail/<%=list[0].mer_id%>">구매</a>
+                <a href="#">결제</a>
             </button>
             <button class="btn btn-outline-primary btn-sm">
-                <a href="/cart/<%=list[0].mer_id%>">장바구니</a>
+                <a href="#">장바구니</a>
             </button>
         </td>
     </tr>
-<% } %>
 
 </table>

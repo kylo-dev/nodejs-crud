@@ -80,9 +80,17 @@
       <!-- 로그인 끝 -->
 
     </div>
-
+    <% if (who !== '손님') { %>
     <nav class="navbar bg-body-tertiary">
-        <button class="btn btn-sm btn-outline-warning me-2" type="button">장바구니</button>
+      <button class="btn btn-sm btn-outline-warning me-2" type="button">
+        <a href="/purchase" class="text-warning">구매내역</a>
+      </button>
+    </nav>
+    <% } %>
+    <nav class="navbar bg-body-tertiary">
+        <button class="btn btn-sm btn-outline-warning me-2" type="button">
+          <a href="#" class="text-warning">장바구니</a>
+        </button>
     </nav>
     
 
