@@ -12,9 +12,8 @@ module.exports = {
         var categoryId = req.params.category;
 
         db.query('select * from boardtype', (error, boardtypes)=>{
-            db.query('select count(*) as merCount from merchandise', (err, result)=>{
                 db.query('select * from merchandise', (err2, results)=>{
-                    var haveMerchandise = result[0].merCount !== 0;
+                    var haveMerchandise = results.length !== 0;
                     var context;
                     if (categoryId === 'all'){
                         if (authIsOwner(req, res)) {
@@ -80,7 +79,6 @@ module.exports = {
                         });
                     }
                 });
-             });
         });
     },
     search: (req, res)=>{
@@ -118,6 +116,41 @@ module.exports = {
                     };
                 }
                 req.app.render('home', context, (error, html)=>{
+                    res.end(html);
+                });
+            });
+        });
+    },
+    detail: (req, res)=>{
+        var merId = req.params.merId;
+        db.query('select * from boardtype', (err, boardtypes)=>{
+            db.query(`select * from merchandise where mer_id = ${merId}`,(err, result)=>{
+
+                var context;
+                if (authIsOwner(req, res)) {
+                    // 로그인한 경우
+                    context = {
+                        menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                        who: req.session.name,
+                        logined: 'YES',
+                        boardtypes: boardtypes,
+                        body: 'shopCRU.ejs',
+                        list: result,
+                        check: 'y'
+                    };
+                } else {
+                    // 비로그인인 경우
+                    context = {
+                        menu: 'menuForCustomer.ejs',
+                        who: '손님',
+                        logined: 'NO',
+                        boardtypes: boardtypes,
+                        body: 'shopCRU.ejs',
+                        list: result,
+                        check: 'n'
+                    };
+                }
+                req.app.render('home', context, (err, html)=>{
                     res.end(html);
                 });
             });

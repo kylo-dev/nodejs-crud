@@ -5,7 +5,11 @@
         <% var i = 0
              while (i<list.length) { %>
                 <tr>
-                    <td><img src="<%=list[i].image%>" style="width:100px;height:100px; "></td>
+                    <td>
+                        <a href="/shop/detail/<%=list[i].mer_id%>">
+                            <img src="<%=list[i].image%>" style="width:100px;height:100px; ">
+                        </a>
+                    </td>
                     <td><%=list[i].name%></td>
                     <td>가격 : <%=list[i].price%></td>
                     <td>브랜드 : <%=list[i].brand%></td> 
