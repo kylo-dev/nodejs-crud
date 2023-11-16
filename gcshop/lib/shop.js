@@ -1,6 +1,7 @@
 // 컴퓨터공학과 201935247 김현겸
 
 var db = require('./db');
+var sanitizeHtml = require('sanitize-html');
 
 function authIsOwner(req, res) {
     return req.session.is_logined || false;
@@ -80,6 +81,46 @@ module.exports = {
                     }
                 });
              });
+        });
+    },
+    search: (req, res)=>{
+        var post = req.body;
+
+        search = sanitizeHtml(post.search);
+        db.query('select * from boardtype', (err, boardtypes)=>{
+            db.query(`select * from merchandise
+            where name like '%${search}%' or brand like '%${search}%' or supplier like '%${search}%'`, (err, result)=>{
+                var context;
+                var haveMerchandise = result.length !== 0;
+                if (authIsOwner(req, res)) {
+                    // 로그인한 경우
+                    context = {
+                        menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                        who: req.session.name,
+                        logined: 'YES',
+                        boardtypes: boardtypes,
+                        body: 'merchandise.ejs',
+                        haveMerchandise: haveMerchandise,
+                        list: result,
+                        check: 'v'
+                    };
+                } else {
+                    // 비로그인인 경우
+                    context = {
+                        menu: 'menuForCustomer.ejs',
+                        who: '손님',
+                        logined: 'NO',
+                        boardtypes: boardtypes,
+                        body: 'merchandise.ejs',
+                        haveMerchandise: haveMerchandise,
+                        list: result,
+                        check: 'v'
+                    };
+                }
+                req.app.render('home', context, (error, html)=>{
+                    res.end(html);
+                });
+            });
         });
     },
 }
