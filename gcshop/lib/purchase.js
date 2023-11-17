@@ -163,8 +163,33 @@ module.exports = {
   cartPay : (req, res)=>{
 
     const selectedItems = JSON.parse(req.body.selectedItems);
+    if(selectedItems.length === 0){
+      res.end(`<script type='text/javascript'>
+                alert("No product has been selected.");
+                setTimeout(() => {
+                    location.href='http://localhost:3000/purchase/cart';
+                }, 1000); </script>`);
+        return;
+    }
 
+    var loginid = req.session.userPk;
+    const currentDate = dateModule.dateOfEightDigit();
     console.log(selectedItems);
+
+    for(var i = 0; i < selectedItems.length; i++){
+      var merId = parseInt(selectedItems[i].mer_id, 10);
+      var price = parseInt(selectedItems[i].price, 10);
+      var qty = parseInt(selectedItems[i].qty, 10);
+      var point = price * 0.005;
+      var total = price * qty;
+
+      db.query('insert into purchase(loginid,mer_id,date,price,point,qty,total,payYN,cancel,refund) values(?,?,?,?,?,?,?,?,?,?)',
+          [loginid, merId, currentDate, price, point, qty, total, 'N','N','N'], (err, result)=>{
+            if(err){
+              throw err;
+            }
+          });
+    }
     res.writeHead(302, {Location: '/purchase'});
     res.end();
   }
