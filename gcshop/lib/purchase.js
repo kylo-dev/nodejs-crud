@@ -199,6 +199,7 @@ module.exports = {
     res.end();
   },
 
+  // Manager 관련 컨트롤러
   manageCreate : (req, res)=>{
     db.query('select * from boardtype', (err, boardtypes)=>{
       db.query('select * from merchandise', (err2, results)=>{
