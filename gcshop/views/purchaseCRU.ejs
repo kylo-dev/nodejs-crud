@@ -1,5 +1,5 @@
 <!-- 컴퓨터공학과 201935247 김현겸 -->
-<form action="/purchase/detail/<%=list[0].mer_id%>" method="post">
+<form method="post">
     <table class="table table-bordered">
         <input type="hidden" name="merId" value="<%=list[0].mer_id%>">
         <tr>
@@ -27,8 +27,8 @@
 
         <tr>
             <td>
-                <button class="btn btn-outline-primary btn-sm" type="submit">결제</button>
-                <button class="btn btn-outline-primary btn-sm">장바구니</button>
+                <button formaction="/purchase/payment" class="btn btn-outline-primary btn-sm" type="submit">결제</button>
+                <button formaction="/purchase/cart" class="btn btn-outline-primary btn-sm">장바구니</button>
             </td>
         </tr>
     </table>

@@ -94,7 +94,6 @@ module.exports = {
             if(err){
               throw err;
             }
-            console.log(result);
             res.writeHead(302, {Location: '/purchase'});
             res.end();
           });
@@ -108,5 +107,65 @@ module.exports = {
           res.writeHead(302, {Location: '/purchase'});
           res.end();
         })
+  },
+  cartView: (req, res)=>{
+    var loginId = req.session.userPk;
+
+    db.query("select * from boardtype", (err, boardtypes) => {
+      db.query(`select m.mer_id, m.image, m.name, m.price, m.stock, c.date from cart c 
+              join merchandise m on c.mer_id = m.mer_id where loginid=?`,[loginId], (err2, results) => {
+          var haveCart = results.length !== 0;
+          
+          var context = {
+            menu:
+              req.session.class === "00"
+                ? "menuForManager.ejs"
+                : "menuForCustomer.ejs",
+            who: req.session.name,
+            logined: "YES",
+            boardtypes: boardtypes,
+            body: "cart.ejs",
+            list: results,
+            haveCart: haveCart,
+          };
+          req.app.render("home", context, (err, html) => {
+            res.end(html);
+          });
+        }
+      );
+    });
+  },
+  cartAdd: (req, res)=>{
+    var post = req.body;
+
+    var loginId = req.session.userPk;
+    var merId = post.merId;
+    const currentDate = dateModule.dateOfEightDigit();
+
+    db.query('select * from cart where mer_id=?',[merId], (error, cart)=>{
+      if(cart.length !== 0){
+
+        res.end(`<script type='text/javascript'>
+                alert("You already add the merchandise");
+                setTimeout(() => {
+                    location.href='http://localhost:3000/purchase/cart';
+                }, 1000); </script>`);
+        return;
+      }
+      db.query('insert into cart(loginid, mer_id, date) values(?,?,?)',
+        [loginId,merId,currentDate], (err, result)=>{
+          res.writeHead(302, {Location: '/purchase/cart'});
+          res.end();
+        });
+    });
+  },
+
+  cartPay : (req, res)=>{
+
+    const selectedItems = JSON.parse(req.body.selectedItems);
+
+    console.log(selectedItems);
+    res.writeHead(302, {Location: '/purchase'});
+    res.end();
   }
 };
