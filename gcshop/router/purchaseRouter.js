@@ -4,12 +4,16 @@ var router = express.Router();
 
 var purchase = require('../lib/purchase');
 
+router.get('/', (req, res)=>{
+    purchase.view(req, res);
+});
+
 router.get('/detail/:merId', (req, res)=>{
     purchase.detail(req, res);
 });
 
-router.get('/', (req, res)=>{
-    purchase.view(req, res);
+router.post('/detail/:merId', (req, res)=>{
+    purchase.payment(req, res);
 });
 
 module.exports = router;
