@@ -1,5 +1,5 @@
 <!-- 컴퓨터공학과 201935247 김현겸 -->
-<table class="table table-bordered border-primary text-center">
+<table class="table table-bordered border-primary text-center" style="width: 1300px;">
     <% if (havePurchase) { %>
         <thead>
             <td class="fw-bold">상품</td>
@@ -21,7 +21,7 @@
                     <td><%=list[i].date%></td>
                     <td>
                         <% if (list[i].cancel === 'N'){ %>
-                            <a href="#">구매취소</a>
+                            <a href="/purchase/cancel/<%=list[i].purchase_id %>" onclick="if(confirm('정말로 취소하시겠습니까?')==false){return false; }">구매취소</a>
                         <% } else{ %>
                             취소된 상품 
                             <% } %>

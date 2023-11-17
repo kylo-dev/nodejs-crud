@@ -27,12 +27,12 @@ module.exports = {
     var loginId = req.session.userPk;
     db.query("select * from boardtype", (err, boardtypes) => {
       db.query(
-        `select m.image, m.name, p.price, p.qty, p.total, p.date, p.cancel from purchase as p 
+        `select m.image, m.name, p.purchase_id, p.price, p.qty, p.total, p.date, p.cancel from purchase as p 
                     join merchandise as m on p.mer_id=m.mer_id where loginid=?`,
         [loginId],
         (err2, results) => {
           var havePurchase = results.length !== 0;
-
+          
           var context = {
             menu:
               req.session.class === "00"
@@ -99,4 +99,14 @@ module.exports = {
             res.end();
           });
   },
+  cancel : (req, res)=>{
+
+    var purchaseId = req.params.purchaseId;
+
+    db.query('update purchase set cancel=? where purchase_id=?', 
+        ['Y', purchaseId], (err, result)=>{
+          res.writeHead(302, {Location: '/purchase'});
+          res.end();
+        })
+  }
 };

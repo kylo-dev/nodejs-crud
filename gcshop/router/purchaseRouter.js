@@ -16,4 +16,8 @@ router.post('/detail/:merId', (req, res)=>{
     purchase.payment(req, res);
 });
 
+router.get('/cancel/:purchaseId', (req, res)=>{
+    purchase.cancel(req, res);
+});
+
 module.exports = router;
