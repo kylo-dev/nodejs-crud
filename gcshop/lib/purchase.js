@@ -188,9 +188,43 @@ module.exports = {
             if(err){
               throw err;
             }
+            db.query('delete from cart where mer_id=?', [merId], (err2, result)=>{
+              if(err2){
+                throw err2;
+              }
+            })
           });
     }
     res.writeHead(302, {Location: '/purchase'});
     res.end();
+  },
+
+  manageCreate : (req, res)=>{
+    db.query('select * from boardtype', (err, boardtypes)=>{
+      db.query('select * from merchandise', (err2, results)=>{
+        var haveMerchandise = results.length !== 0;
+
+        var context = {
+          menu: "menuForManager.ejs",
+          who: req.session.name,
+          logined: "YES",
+          boardtypes: boardtypes,
+          body: "purchaseForManager.ejs",
+          list: results,
+          haveMerchandise: haveMerchandise
+        };
+        req.app.render("home", context, (err, html) => {
+          res.end(html);
+        });
+      });
+    });
+  },
+
+  managerMerchandise : (req, res)=>{
+    var merId = req.params.merId;
+
+    db.query(`select * from merchandise where mer_id = ${merId}`, (err, result)=>{
+      res.json(result);
+    });
   }
 };

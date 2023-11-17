@@ -8,10 +8,12 @@ router.get('/shop/:category', (req, res)=>{
     shop.home(req, res);
 });
 
+// 상품 검색하기
 router.post('/shop/search', (req, res)=>{
     shop.search(req, res);
 });
 
+// 상품 세부사항 페이지로 이동
 router.get('/shop/detail/:merId', (req, res)=>{
     shop.detail(req, res);
 });
