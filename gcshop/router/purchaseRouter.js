@@ -71,6 +71,13 @@ router.get('/cart/manage/create', (req, res)=>{
     purchase.manageCartCreate(req, res);
 });
 
+router.get('/cart/manage/view/:pNum', (req, res)=>{
+    purchase.manageCartUpdate(req, res);
+});
+
+router.get('/cart/delete/:cartId', (req, res)=>{
+    purchase.cartDelete(req, res);
+});
 
 
 module.exports = router;

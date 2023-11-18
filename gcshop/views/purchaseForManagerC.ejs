@@ -83,6 +83,7 @@ async function updateProductInfo() {
       document.getElementById('productName').innerText = '상품명: ' + res[0].name;
       document.getElementById('productBrand').innerText = '브랜드: ' + res[0].brand;
       document.getElementById('productPrice').innerText = '가격: ' + res[0].price + ' 원';
+      document.getElementById('quantity').max = res[0].stock;
 
       // 상품 가격 hidden 필드에 설정
       document.getElementById('productPriceInput').value = res[0].price;

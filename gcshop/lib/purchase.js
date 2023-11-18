@@ -377,5 +377,58 @@ module.exports = {
         });
       });
     });
+  },
+
+  manageCartUpdate : (req, res)=>{
+    if (!checkSessionClass(req, res)) {
+      return;
+    }
+    var page = req.params.pNum;
+
+    db.query("select * from boardtype", (err, boardtypes) => {
+      db.query('select count(*) as cartCnt from cart', (err2, cartall)=>{
+
+        /* 페이징 기능 */
+        var numPerPage = 4;
+        var offs = (page - 1) * numPerPage;
+        var totalPages = Math.ceil(cartall[0].cartCnt / numPerPage);
+        var haveCart = cartall[0].cartCnt !== 0;
+
+        db.query(
+          `select m.image, m.name, m.price, c.* from cart as c 
+                      join merchandise as m on c.mer_id=m.mer_id
+                      order by date LIMIT ? OFFSET ?`, [numPerPage, offs],(err3, results) => {
+            
+            var context = {
+              menu:
+                req.session.class === "00"
+                  ? "menuForManager.ejs"
+                  : "menuForCustomer.ejs",
+              who: req.session.name,
+              logined: "YES",
+              boardtypes: boardtypes,
+              body: "cartManagerView.ejs",
+              list: results,
+              haveCart: haveCart,
+              pageNum: page,
+              totalPages: totalPages
+            };
+            req.app.render("home", context, (err, html) => {
+              res.end(html);
+            });
+          }
+        );
+      });
+    });
+  },
+
+  cartDelete : (req, res)=>{
+    if(!checkClass(req, res)){
+      return;
+    } 
+    var cartId = req.params.cartId;
+    db.query(`delete from cart where cart_id = ${cartId}`, (err, result)=>{
+      res.redirect("/purchase/cart/manage/view/1");
+    });
   }
 };
