@@ -41,7 +41,7 @@ router.post('/cart/payment', (req, res)=>{
 
 //== 관리자 ==//
 // 관리자 구매 내역 생성 페이지로 이동
-router.get('/manage/:cu', (req, res)=>{
+router.get('/manage/create', (req, res)=>{
     purchase.manageCreate(req, res);
 });
 
@@ -50,9 +50,20 @@ router.get('/manage/merchandise/:merId', (req, res)=>{
     purchase.manageMerchandise(req, res);
 });
 
-router.get('/manage/:vu/:pNum', (req, res)=>{
+router.get('/manage/view/:vu/:pNum', (req, res)=>{
     purchase.manageView(req, res);
 });
 
+router.get('/manage/delete/:purchaseId', (req, res)=>{
+    purchase.manageDelete(req, res);
+});
+
+router.get('/manage/update/:purchaseId', (req, res)=>{
+    purchase.manageUpdate(req, res);
+});
+
+router.post('/manage/update_process', (req, res)=>{
+    purchase.manageUpdate_process(req, res);
+});
 
 module.exports = router;

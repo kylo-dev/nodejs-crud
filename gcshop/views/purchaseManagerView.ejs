@@ -11,7 +11,7 @@
             <td class="fw-bold">구매일</td>
             <td class="fw-bold">취소여부</td>
             <% if (vu === 'u') { %>
-                <td class="=fw-bold">상품 관리</td>
+                <td class="fw-bold">상품 관리</td>
             <% } %>
         </thead>
         <% var i = 0
@@ -33,8 +33,8 @@
                     </td>
                     <% if (vu === 'u') { %>
                         <td>
-                            <a href="#" class="d-block m-2 btn btn-outline-primary">수정</a>
-                            <a href="#" class="d-block m-2 btn btn-outline-danger" onclick="if(confirm('정말로 삭제하시겠습니까?')==false){return false; }">삭제</a>
+                            <a href="/purchase/manage/update/<%=list[i].purchase_id %>" class="d-block m-2 btn btn-outline-primary <%= list[i].cancel === 'Y' ? 'disabled' : '' %>">수정</a>
+                            <a href="/purchase/manage/delete/<%=list[i].purchase_id %>" class="d-block m-2 btn btn-outline-danger" onclick="if(confirm('정말로 삭제하시겠습니까?')==false){return false; }">삭제</a>
                         </td>
                         
                     <% } %>
@@ -46,7 +46,7 @@
     <ul class="pagination justify-content-center">
         <% for (var j = 1; j <= totalPages; j++) { %>
             <li class="page-item <%= j == pageNum ? 'disabled' : '' %>">
-                <a class="page-link" href="/purchase/manage/<%= vu %>/<%= j %>"><%= j %></a>
+                <a class="page-link" href="/purchase/manage/view/<%= vu %>/<%= j %>"><%= j %></a>
             </li>
         <% } %>
     </ul>

@@ -119,8 +119,11 @@ module.exports = {
 
     db.query('update purchase set cancel=? where purchase_id=?', 
         ['Y', purchaseId], (err, result)=>{
-          res.writeHead(302, {Location: '/purchase'});
-          res.end();
+          if (req.session.class === '00') {
+            res.redirect('/purchase/manage/view/u/1');
+        } else {
+            res.redirect('/purchase');
+        }
         })
   },
   cartView: (req, res)=>{
@@ -216,6 +219,10 @@ module.exports = {
 
   // Manager 관련 컨트롤러
   manageCreate : (req, res)=>{
+    if (!checkSessionClass(req, res)) {
+      return;
+    }
+
     db.query('select * from boardtype', (err, boardtypes)=>{
       db.query('select * from merchandise', (err2, results)=>{
         var haveMerchandise = results.length !== 0;
@@ -225,9 +232,9 @@ module.exports = {
           who: req.session.name,
           logined: "YES",
           boardtypes: boardtypes,
-          body: "purchaseForManager.ejs",
+          body: "purchaseForManagerC.ejs",
           list: results,
-          haveMerchandise: haveMerchandise
+          haveMerchandise: haveMerchandise,
         };
         req.app.render("home", context, (err, html) => {
           res.end(html);
@@ -245,6 +252,9 @@ module.exports = {
   },
 
   manageView: (req, res)=>{
+    if (!checkSessionClass(req, res)) {
+      return;
+    }
     var vu = req.params.vu;
     var page = req.params.pNum;
 
@@ -284,5 +294,59 @@ module.exports = {
         );
       });
     });
-  }
+  },
+
+  manageUpdate : (req, res)=>{
+    var purId = req.params.purchaseId;
+
+    db.query('select * from boardtype', (err, boardtypes)=>{
+      db.query(`select m.name, m.price, m.image, m.stock, p.* from purchase as p 
+            join merchandise as m on p.mer_id = m.mer_id
+            where purchase_id = ${purId}`, (err2, result)=>{
+
+        var context = {
+          menu: "menuForManager.ejs",
+          who: req.session.name,
+          logined: "YES",
+          boardtypes: boardtypes,
+          body: "purchaseForManagerU.ejs",
+          list: result,
+        };
+        req.app.render("home", context, (err, html) => {
+          res.end(html);
+        });
+      });
+    });
+  },
+  manageUpdate_process : (req, res)=>{
+    var post = req.body;
+
+    var purId = post.purchaseId;
+    var qty = sanitizeHtml(post.qty);
+    var total = post.price * qty;
+    var payYN = post.payYN === 'Y' ? 'Y' : 'N';
+    var cancel = post.cancel === 'Y' ? 'Y' : 'N';
+    var refund = post.refund === 'Y' ? 'Y' : 'N';
+
+    db.query(`update purchase set qty=?, total=?,payYN=?, cancel=?, refund=? where purchase_id=?`,
+          [qty, total, payYN, cancel, refund, purId], (err, result)=>{
+            if(err){
+              throw err;
+            }
+            res.writeHead(302, {Location: `/purchase/manage/view/u/1`});
+            res.end();
+          });
+  },
+
+  manageDelete : (req, res)=>{
+    if(!checkSessionClass(req, res)){
+      return;
+    } 
+  
+    var purchaseId = req.params.purchaseId;
+    db.query(`delete from purchase where purchase_id = ${purchaseId}`, (err, result)=>{
+      res.redirect("/purchase/manage/view/u/1");
+    });
+  },
+
 };
