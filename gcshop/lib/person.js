@@ -9,7 +9,7 @@ function checkSessionClass(req, res, validClass = '00') {
         <script type='text/javascript'>
             alert("You do not have access.");
             setTimeout(() => {
-                location.href='http://localhost:3000/';
+                location.href='http://localhost:3000/shop/all';
             }, 1000);
         </script>`;
         res.end(script);
@@ -84,21 +84,22 @@ module.exports = {
                     location.href='http://localhost:3000/person/create';}, 1000);
                 </script>`);
                 return;
+            } else{
+                loginId = sanitizeHtml(post.loginid);
+                pwd = sanitizeHtml(post.password);
+                Uname = sanitizeHtml(post.name);
+                tel = sanitizeHtml(post.tel);
+                birth = sanitizeHtml(post.birth);
+                address = sanitizeHtml(post.address);
+                var Uclass = '02';
+                var point = 0;
+
+                db.query(`insert into person values(?,?,?,?,?,?,?,?)`,
+                    [loginId,pwd,Uname,address,tel,birth,Uclass,point], (err2, result2)=>{
+                        res.send("<script>alert('회원 가입이 완료되었습니다.'); window.location.href='/shop/all';</script>");
+                    });
             }
         });
-        loginId = sanitizeHtml(post.loginid);
-        pwd = sanitizeHtml(post.password);
-        Uname = sanitizeHtml(post.name);
-        tel = sanitizeHtml(post.tel);
-        birth = sanitizeHtml(post.birth);
-        address = sanitizeHtml(post.address);
-        var Uclass = '02';
-        var point = 0;
-
-        db.query(`insert into person values(?,?,?,?,?,?,?,?)`,
-            [loginId,pwd,Uname,address,tel,birth,Uclass,point], (err2, result2)=>{
-                res.send("<script>alert('회원 가입이 완료되었습니다.'); window.location.href='/';</script>");
-            });
     },
     update : (req, res)=>{
         if(!checkSessionClass(req, res)){

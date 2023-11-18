@@ -45,8 +45,13 @@ router.get('/manage/:cu', (req, res)=>{
     purchase.manageCreate(req, res);
 });
 
+// 관리자 동적으로 상품 선택 - 데이터 받기
 router.get('/manage/merchandise/:merId', (req, res)=>{
-    purchase.managerMerchandise(req, res);
+    purchase.manageMerchandise(req, res);
+});
+
+router.get('/manage/view/:pNum', (req, res)=>{
+    purchase.manageView(req, res);
 });
 
 

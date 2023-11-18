@@ -1,0 +1,57 @@
+<!-- 컴퓨터공학과 201935247 김현겸 -->
+<table class="table table-bordered border-primary text-center" style="width: 1300px;">
+    <% if (havePurchase) { %>
+        <thead>
+            <td class="fw-bold">구매자</td>
+            <td class="fw-bold">상품</td>
+            <td class="fw-bold">상품명</td>
+            <td class="fw-bold">단가</td>
+            <td class="fw-bold">구매량</td>
+            <td class="fw-bold">총 금액</td>
+            <td class="fw-bold">구매일</td>
+            <td class="fw-bold">취소여부</td>
+        </thead>
+        <% var i = 0
+             while (i<list.length) { %>
+                <tr>
+                    <td><%=list[i].loginid%></td>
+                    <td><img src="<%=list[i].image%>" alt="merchandise image" style="width: 30%;"></td>
+                    <td><%=list[i].name%></td>
+                    <td><%=list[i].price%></td>
+                    <td><%=list[i].qty%></td>
+                    <td><%=list[i].total%></td>
+                    <td><%=list[i].date%></td>
+                    <td>
+                        <% if (list[i].cancel === 'N'){ %>
+                            <a href="/purchase/cancel/<%=list[i].purchase_id %>" onclick="if(confirm('정말로 취소하시겠습니까?')==false){return false; }">구매취소</a>
+                        <% } else{ %>
+                            취소된 상품 
+                            <% } %>
+                    </td>
+                </tr>
+        <% i += 1 } %>
+</table>
+
+<nav aria-label="Page navigation example" class="mb-4">
+    <ul class="pagination justify-content-center">
+<% var j = 1;
+    while(j <= totalPages) {
+        if(j == pageNum){ %>
+            <li class="page-item disabled"><a class="page-link"><%=j%></a></li>
+            <!-- <span style="font-weight: bold;"><%=j%></span> &nbsp; &nbsp; -->
+        <% } else { %>
+            <li class="page-item"><a class="page-link" href="/purchase/manage/view/<%=j%>"><%=j%></a></li>
+            <!-- <span><a href="/purchase/manage/view/<%=j%>"><%=j%></a></span> &nbsp; &nbsp; -->
+        <% }
+        j++;
+    } %>
+    </ul>
+</nav>
+
+<% }
+    else { %>
+    <tr>
+        <td>자료 없음</td>
+    </tr>
+</table>
+<% } %>

@@ -9,7 +9,7 @@ function checkSessionClass(req, res, validClass = '00') {
         <script type='text/javascript'>
             alert("You do not have access.");
             setTimeout(() => {
-                location.href='http://localhost:3000/';
+                location.href='http://localhost:3000/shop/all';
             }, 1000);
         </script>`;
         res.end(script);

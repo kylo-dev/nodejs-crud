@@ -7,19 +7,34 @@ const dateModule = require('./template');
 function authIsOwner(req, res) {
   return req.session.is_logined || false;
 }
-function checkSessionClass(req, res, validClass = undefined) {
+function checkClass(req, res, validClass = undefined) {
   if (req.session.class === validClass) {
     const script = `
         <script type='text/javascript'>
             alert("You do not have access.");
             setTimeout(() => {
-                location.href='http://localhost:3000/';
+                location.href='http://localhost:3000/shop/all';
             }, 1000);
         </script>`;
     res.end(script);
     return false;
   }
   return true;
+}
+
+function checkSessionClass(req, res, validClass = '00') {
+    if (req.session.class !== validClass) {
+        const script = `
+        <script type='text/javascript'>
+            alert("You do not have access.");
+            setTimeout(() => {
+                location.href='http://localhost:3000/shop/all';
+            }, 1000);
+        </script>`;
+        res.end(script);
+        return false;
+    }
+    return true;
 }
 
 module.exports = {
@@ -54,7 +69,7 @@ module.exports = {
   },
 
   detail: (req, res) => {
-    if (!checkSessionClass(req, res)) {
+    if (!checkClass(req, res)) {
       return;
     }
     var merId = req.params.merId;
@@ -221,11 +236,51 @@ module.exports = {
     });
   },
 
-  managerMerchandise : (req, res)=>{
+  manageMerchandise : (req, res)=>{
     var merId = req.params.merId;
 
     db.query(`select * from merchandise where mer_id = ${merId}`, (err, result)=>{
       res.json(result);
+    });
+  },
+
+  manageView: (req, res)=>{
+    var page = req.params.pNum;
+
+    db.query("select * from boardtype", (err, boardtypes) => {
+      db.query('select count(*) as purCnt from purchase', (err2, purall)=>{
+
+        /* 페이징 기능 */
+        var numPerPage = 4;
+        var offs = (page - 1) * numPerPage;
+        var totalPages = Math.ceil(purall[0].purCnt / numPerPage);
+        var havePurchase = purall[0].purCnt !== 0;
+
+        db.query(
+          `select m.image, m.name, p.purchase_id, p.loginid, p.price, p.qty, p.total, p.date, p.cancel from purchase as p 
+                      join merchandise as m on p.mer_id=m.mer_id
+                      order by date LIMIT ? OFFSET ?`, [numPerPage, offs],(err3, results) => {
+            
+            var context = {
+              menu:
+                req.session.class === "00"
+                  ? "menuForManager.ejs"
+                  : "menuForCustomer.ejs",
+              who: req.session.name,
+              logined: "YES",
+              boardtypes: boardtypes,
+              body: "purchaseManagerView.ejs",
+              list: results,
+              havePurchase: havePurchase,
+              pageNum: page,
+              totalPages: totalPages
+            };
+            req.app.render("home", context, (err, html) => {
+              res.end(html);
+            });
+          }
+        );
+      });
     });
   }
 };
