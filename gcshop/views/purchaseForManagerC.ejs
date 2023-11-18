@@ -1,5 +1,5 @@
 <% if (haveMerchandise){ %>
-<form id="orderForm" action="/purchase/payment" method="post">
+<form id="orderForm" method="post">
 
     <table class="table table-bordered">
         <tr>
@@ -48,8 +48,8 @@
         
         <tr>
             <td>
-                <button type="submit">주문</button>
-                <!-- <button type="submit" onclick="submitOrder()">주문</button> -->
+                <button type="submit" formaction = "/purchase/payment">결제</button>
+                <button type="submit" formaction = "/purchase/cart">장바구니</button>
             </td>
         </tr>
     </table>
@@ -89,15 +89,6 @@ async function updateProductInfo() {
     })
     .catch(function(error) {
       console.error('Error fetching product data:', error);
-    });
-}
-
-function submitOrder() {
-    var form = document.getElementById('orderForm');
-    // 여기에서 주문을 서버로 전송하는 로직을 추가해야 합니다.
-    console.log('주문 데이터:', {
-    merId: form.elements['merId'].value,
-    quantity: form.elements['quantity'].value
     });
 }
 </script>

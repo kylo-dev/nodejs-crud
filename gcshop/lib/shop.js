@@ -134,7 +134,7 @@ module.exports = {
                         who: req.session.name,
                         logined: 'YES',
                         boardtypes: boardtypes,
-                        body: 'shopCRU.ejs',
+                        body: 'shopDetail.ejs',
                         list: result,
                         check: 'y'
                     };
@@ -145,7 +145,7 @@ module.exports = {
                         who: '손님',
                         logined: 'NO',
                         boardtypes: boardtypes,
-                        body: 'shopCRU.ejs',
+                        body: 'shopDetail.ejs',
                         list: result,
                         check: 'n'
                     };

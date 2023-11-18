@@ -41,11 +41,8 @@ module.exports = {
   view: (req, res) => {
     var loginId = req.session.userPk;
     db.query("select * from boardtype", (err, boardtypes) => {
-      db.query(
-        `select m.image, m.name, p.purchase_id, p.price, p.qty, p.total, p.date, p.cancel from purchase as p 
-                    join merchandise as m on p.mer_id=m.mer_id where loginid=?`,
-        [loginId],
-        (err2, results) => {
+      db.query( `select m.image, m.name, p.* from purchase as p 
+                    join merchandise as m on p.mer_id=m.mer_id where loginid=?`,[loginId], (err2, results) => {
           var havePurchase = results.length !== 0;
           
           var context = {
@@ -59,6 +56,7 @@ module.exports = {
             body: "purchase.ejs",
             list: results,
             havePurchase: havePurchase,
+            loginid: loginId
           };
           req.app.render("home", context, (err, html) => {
             res.end(html);
@@ -75,9 +73,7 @@ module.exports = {
     var merId = req.params.merId;
 
     db.query("select * from boardtype", (err, boardtypes) => {
-      db.query(
-        `select * from merchandise where mer_id = ${merId}`,
-        (err2, result) => {
+      db.query(`select * from merchandise where mer_id = ${merId}`,(err2, result) => {
           var context = {
             menu:
               req.session.class === "00"
@@ -86,7 +82,7 @@ module.exports = {
             who: req.session.name,
             logined: "YES",
             boardtypes: boardtypes,
-            body: "purchaseCRU.ejs",
+            body: "purchaseCreate.ejs",
             list: result,
           };
           req.app.render("home", context, (err, html) => {
@@ -99,6 +95,15 @@ module.exports = {
 
   payment: (req, res)=>{
     var post = req.body;
+    if (post.price === ''){
+      res.end(`<script type='text/javascript'>
+                alert("there is not selected items");
+                setTimeout(() => {
+                    location.href='http://localhost:3000/purchase/manage/create';
+                }, 1000); </script>`);
+        return;
+    }
+
     var loginid = req.session.userPk;
     const currentDate = dateModule.dateOfEightDigit();
     var point = post.price * 0.005;
@@ -113,19 +118,19 @@ module.exports = {
             res.end();
           });
   },
-  cancel : (req, res)=>{
 
+  cancel : (req, res)=>{
     var purchaseId = req.params.purchaseId;
 
-    db.query('update purchase set cancel=? where purchase_id=?', 
-        ['Y', purchaseId], (err, result)=>{
+    db.query('update purchase set cancel=? where purchase_id=?', ['Y', purchaseId], (err, result)=>{
           if (req.session.class === '00') {
             res.redirect('/purchase/manage/view/u/1');
         } else {
             res.redirect('/purchase');
         }
-        })
+      });
   },
+
   cartView: (req, res)=>{
     var loginId = req.session.userPk;
 
@@ -153,6 +158,7 @@ module.exports = {
       );
     });
   },
+  
   cartAdd: (req, res)=>{
     var post = req.body;
 
@@ -160,7 +166,7 @@ module.exports = {
     var merId = post.merId;
     const currentDate = dateModule.dateOfEightDigit();
 
-    db.query('select * from cart where mer_id=?',[merId], (error, cart)=>{
+    db.query('select * from cart where mer_id=? and loginid =?',[merId, loginId], (error, cart)=>{
       if(cart.length !== 0){
 
         res.end(`<script type='text/javascript'>
@@ -170,8 +176,7 @@ module.exports = {
                 }, 1000); </script>`);
         return;
       }
-      db.query('insert into cart(loginid, mer_id, date) values(?,?,?)',
-        [loginId,merId,currentDate], (err, result)=>{
+      db.query('insert into cart(loginid, mer_id, date) values(?,?,?)',[loginId,merId,currentDate], (err, result)=>{
           res.writeHead(302, {Location: '/purchase/cart'});
           res.end();
         });
@@ -179,8 +184,8 @@ module.exports = {
   },
 
   cartPay : (req, res)=>{
-
     const selectedItems = JSON.parse(req.body.selectedItems);
+
     if(selectedItems.length === 0){
       res.end(`<script type='text/javascript'>
                 alert("No product has been selected.");
@@ -342,11 +347,35 @@ module.exports = {
     if(!checkSessionClass(req, res)){
       return;
     } 
-  
     var purchaseId = req.params.purchaseId;
     db.query(`delete from purchase where purchase_id = ${purchaseId}`, (err, result)=>{
       res.redirect("/purchase/manage/view/u/1");
     });
   },
 
+  // Manange Cart 관련
+  manageCartCreate : (req, res)=>{
+    if (!checkSessionClass(req, res)) {
+      return;
+    }
+
+    db.query('select * from boardtype', (err, boardtypes)=>{
+      db.query('select * from merchandise', (err2, results)=>{
+        var haveMerchandise = results.length !== 0;
+
+        var context = {
+          menu: "menuForManager.ejs",
+          who: req.session.name,
+          logined: "YES",
+          boardtypes: boardtypes,
+          body: "purchaseForManagerC.ejs",
+          list: results,
+          haveMerchandise: haveMerchandise,
+        };
+        req.app.render("home", context, (err, html) => {
+          res.end(html);
+        });
+      });
+    });
+  }
 };

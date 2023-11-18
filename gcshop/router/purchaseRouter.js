@@ -54,10 +54,6 @@ router.get('/manage/view/:vu/:pNum', (req, res)=>{
     purchase.manageView(req, res);
 });
 
-router.get('/manage/delete/:purchaseId', (req, res)=>{
-    purchase.manageDelete(req, res);
-});
-
 router.get('/manage/update/:purchaseId', (req, res)=>{
     purchase.manageUpdate(req, res);
 });
@@ -65,5 +61,16 @@ router.get('/manage/update/:purchaseId', (req, res)=>{
 router.post('/manage/update_process', (req, res)=>{
     purchase.manageUpdate_process(req, res);
 });
+
+router.get('/manage/delete/:purchaseId', (req, res)=>{
+    purchase.manageDelete(req, res);
+});
+
+//== Manage Cart ==//
+router.get('/cart/manage/create', (req, res)=>{
+    purchase.manageCartCreate(req, res);
+});
+
+
 
 module.exports = router;
