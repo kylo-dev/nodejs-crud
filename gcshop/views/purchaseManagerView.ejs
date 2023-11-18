@@ -10,6 +10,9 @@
             <td class="fw-bold">총 금액</td>
             <td class="fw-bold">구매일</td>
             <td class="fw-bold">취소여부</td>
+            <% if (vu === 'u') { %>
+                <td class="=fw-bold">상품 관리</td>
+            <% } %>
         </thead>
         <% var i = 0
              while (i<list.length) { %>
@@ -28,23 +31,24 @@
                             취소된 상품 
                             <% } %>
                     </td>
+                    <% if (vu === 'u') { %>
+                        <td>
+                            <a href="#" class="d-block m-2 btn btn-outline-primary">수정</a>
+                            <a href="#" class="d-block m-2 btn btn-outline-danger" onclick="if(confirm('정말로 삭제하시겠습니까?')==false){return false; }">삭제</a>
+                        </td>
+                        
+                    <% } %>
                 </tr>
         <% i += 1 } %>
 </table>
 
 <nav aria-label="Page navigation example" class="mb-4">
     <ul class="pagination justify-content-center">
-<% var j = 1;
-    while(j <= totalPages) {
-        if(j == pageNum){ %>
-            <li class="page-item disabled"><a class="page-link"><%=j%></a></li>
-            <!-- <span style="font-weight: bold;"><%=j%></span> &nbsp; &nbsp; -->
-        <% } else { %>
-            <li class="page-item"><a class="page-link" href="/purchase/manage/view/<%=j%>"><%=j%></a></li>
-            <!-- <span><a href="/purchase/manage/view/<%=j%>"><%=j%></a></span> &nbsp; &nbsp; -->
-        <% }
-        j++;
-    } %>
+        <% for (var j = 1; j <= totalPages; j++) { %>
+            <li class="page-item <%= j == pageNum ? 'disabled' : '' %>">
+                <a class="page-link" href="/purchase/manage/<%= vu %>/<%= j %>"><%= j %></a>
+            </li>
+        <% } %>
     </ul>
 </nav>
 

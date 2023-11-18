@@ -50,7 +50,7 @@ router.get('/manage/merchandise/:merId', (req, res)=>{
     purchase.manageMerchandise(req, res);
 });
 
-router.get('/manage/view/:pNum', (req, res)=>{
+router.get('/manage/:vu/:pNum', (req, res)=>{
     purchase.manageView(req, res);
 });
 

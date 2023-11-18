@@ -245,6 +245,7 @@ module.exports = {
   },
 
   manageView: (req, res)=>{
+    var vu = req.params.vu;
     var page = req.params.pNum;
 
     db.query("select * from boardtype", (err, boardtypes) => {
@@ -272,6 +273,7 @@ module.exports = {
               body: "purchaseManagerView.ejs",
               list: results,
               havePurchase: havePurchase,
+              vu: vu,
               pageNum: page,
               totalPages: totalPages
             };
