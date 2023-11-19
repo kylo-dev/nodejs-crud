@@ -17,7 +17,7 @@
                     <td class="align-middle"><%=list[i].name%></td>
                     <td class="align-middle"><%=list[i].price%></td>
                     <td class="align-middle">
-                        <a href="#" class="d-block m-2 btn btn-outline-primary">수정</a>
+                        <a href="/purchase/cart/update/<%=list[i].cart_id%>" class="d-block m-2 btn btn-outline-primary">수정</a>
                         <a href="/purchase/cart/delete/<%=list[i].cart_id %>" class="d-block m-2 btn btn-outline-danger" onclick="if(confirm('정말로 삭제하시겠습니까?')==false){return false; }">삭제</a>
                     </td>
                 </tr>

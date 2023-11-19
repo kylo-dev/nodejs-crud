@@ -28,7 +28,7 @@
                         </td>
                         <td class="align-middle"><%=list[i].date%></td>
                         <td class="align-middle">
-                            <input type="number" name="qty_<%=list[i].mer_id%>" min="1" max="<%=list[i].stock%>">
+                            <input type="number" name="qty_<%=list[i].mer_id%>" min="1" max="<%=list[i].stock%>" value="<%=list[i].qty%>">
                         </td>
                     </tr>
             <% i += 1 } %>

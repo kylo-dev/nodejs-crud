@@ -135,7 +135,7 @@ module.exports = {
     var loginId = req.session.userPk;
 
     db.query("select * from boardtype", (err, boardtypes) => {
-      db.query(`select m.mer_id, m.image, m.name, m.price, m.stock, c.date from cart c 
+      db.query(`select m.mer_id, m.image, m.name, m.price, m.stock, c.date, c.qty from cart c 
               join merchandise m on c.mer_id = m.mer_id where loginid=?`,[loginId], (err2, results) => {
           var haveCart = results.length !== 0;
           
@@ -420,6 +420,46 @@ module.exports = {
         );
       });
     });
+  },
+
+  cartUpdate :(req, res)=>{
+    var cartId = req.params.cartId;
+
+    db.query('select * from boardtype', (err, boardtypes)=>{
+      db.query(`select m.name, m.price, m.image, m.stock, c.* from cart as c 
+            join merchandise as m on c.mer_id = m.mer_id
+            where cart_id = ${cartId}`, (err2, result)=>{
+
+        var context = {
+          menu: "menuForManager.ejs",
+          who: req.session.name,
+          logined: "YES",
+          boardtypes: boardtypes,
+          body: "cartManagerU.ejs",
+          list: result,
+        };
+        req.app.render("home", context, (err, html) => {
+          res.end(html);
+        });
+      });
+    });
+  },
+
+  cartUpdate_process : (req, res)=>{
+    var post = req.body;
+
+    var cartId = post.cartId;
+    var qty = sanitizeHtml(post.qty);
+
+
+    db.query(`update cart set qty=? where cart_id=?`,
+          [qty, cartId], (err, result)=>{
+            if(err){
+              throw err;
+            }
+            res.writeHead(302, {Location: `/purchase/cart/manage/view/1`});
+            res.end();
+          });
   },
 
   cartDelete : (req, res)=>{

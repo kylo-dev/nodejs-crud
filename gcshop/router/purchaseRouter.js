@@ -75,9 +75,16 @@ router.get('/cart/manage/view/:pNum', (req, res)=>{
     purchase.manageCartUpdate(req, res);
 });
 
+router.get('/cart/update/:cartId', (req, res)=>{
+    purchase.cartUpdate(req, res);
+});
+
+router.post('/cart/update_process', (req, res)=>{
+    purchase.cartUpdate_process(req, res);
+});
+
 router.get('/cart/delete/:cartId', (req, res)=>{
     purchase.cartDelete(req, res);
 });
-
 
 module.exports = router;
