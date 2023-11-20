@@ -197,7 +197,6 @@ module.exports = {
 
     var loginid = req.session.userPk;
     const currentDate = dateModule.dateOfEightDigit();
-    console.log(selectedItems);
 
     for(var i = 0; i < selectedItems.length; i++){
       var merId = parseInt(selectedItems[i].mer_id, 10);

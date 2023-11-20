@@ -1,5 +1,5 @@
 <!-- 컴퓨터공학과 201935247 김현겸 -->
-<h2 class="fw-bold mb-3">관리자 구매내역 페이지</h2>
+<h2 class="fw-bold mb-3">관리자 구매내역 관리 페이지</h2>
 <table class="table table-bordered border-primary text-center" style="width: 1300px;">
     <% if (havePurchase) { %>
         <thead>
@@ -18,14 +18,14 @@
         <% var i = 0
              while (i<list.length) { %>
                 <tr>
-                    <td><%=list[i].loginid%></td>
+                    <td class="align-middle"><%=list[i].loginid%></td>
                     <td><img src="<%=list[i].image%>" alt="merchandise image" style="width: 30%;"></td>
-                    <td><%=list[i].name%></td>
-                    <td><%=list[i].price%></td>
-                    <td><%=list[i].qty%></td>
-                    <td><%=list[i].total%></td>
-                    <td><%=list[i].date%></td>
-                    <td>
+                    <td class="align-middle"><%=list[i].name%></td>
+                    <td class="align-middle"><%=list[i].price%></td>
+                    <td class="align-middle"><%=list[i].qty%></td>
+                    <td class="align-middle"><%=list[i].total%></td>
+                    <td class="align-middle"><%=list[i].date%></td>
+                    <td class="align-middle">
                         <% if (list[i].cancel === 'N'){ %>
                             <a href="/purchase/cancel/<%=list[i].purchase_id %>" onclick="if(confirm('정말로 취소하시겠습니까?')==false){return false; }">구매취소</a>
                         <% } else{ %>

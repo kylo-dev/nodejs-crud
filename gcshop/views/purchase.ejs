@@ -15,12 +15,12 @@
              while (i<list.length) { %>
                 <tr>
                     <td><img src="<%=list[i].image%>" alt="merchandise image" style="width: 30%;"></td>
-                    <td><%=list[i].name%></td>
-                    <td><%=list[i].price%></td>
-                    <td><%=list[i].qty%></td>
-                    <td><%=list[i].total%></td>
-                    <td><%=list[i].date%></td>
-                    <td>
+                    <td class="align-middle"><%=list[i].name%></td>
+                    <td class="align-middle"><%=list[i].price%></td>
+                    <td class="align-middle"><%=list[i].qty%></td>
+                    <td class="align-middle"><%=list[i].total%></td>
+                    <td class="align-middle"><%=list[i].date%></td>
+                    <td class="align-middle">
                         <% if (list[i].cancel === 'N'){ %>
                             <a href="/purchase/cancel/<%=list[i].purchase_id %>" onclick="if(confirm('정말로 취소하시겠습니까?')==false){return false; }">구매취소</a>
                         <% } else{ %>
