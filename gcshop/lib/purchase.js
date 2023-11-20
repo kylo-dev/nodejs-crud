@@ -144,8 +144,8 @@ module.exports = {
               req.session.class === "00"
                 ? "menuForManager.ejs"
                 : "menuForCustomer.ejs",
-            who: req.session.name,
-            logined: "YES",
+            who: req.session.name || '손님',
+            logined: req.session.class ? "YES" : "NO",
             boardtypes: boardtypes,
             body: "cart.ejs",
             list: results,
