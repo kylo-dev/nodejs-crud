@@ -22,7 +22,7 @@ function checkClass(req, res, validClass = undefined) {
   return true;
 }
 
-function checkSessionClass(req, res, validClass = '00') {
+function checkSessionClass(req, res, validClass = '01') {
     if (req.session.class !== validClass) {
         const script = `
         <script type='text/javascript'>
@@ -46,10 +46,9 @@ module.exports = {
           var havePurchase = results.length !== 0;
           
           var context = {
-            menu:
-              req.session.class === "00"
-                ? "menuForManager.ejs"
-                : "menuForCustomer.ejs",
+            menu: req.session.class === '00' ? 'menuForMIS.ejs' :
+              req.session.class === '01' ? 'menuForManager.ejs' :
+              req.session.class === '02' ? 'menuForCustomer.ejs' : 'menuForCustomer.ejs',
             who: req.session.name,
             logined: "YES",
             boardtypes: boardtypes,
@@ -75,10 +74,9 @@ module.exports = {
     db.query("select * from boardtype", (err, boardtypes) => {
       db.query(`select * from merchandise where mer_id = ${merId}`,(err2, result) => {
           var context = {
-            menu:
-              req.session.class === "00"
-                ? "menuForManager.ejs"
-                : "menuForCustomer.ejs",
+            menu: req.session.class === '00' ? 'menuForMIS.ejs' :
+                  req.session.class === '01' ? 'menuForManager.ejs' :
+                  req.session.class === '02' ? 'menuForCustomer.ejs' : 'menuForCustomer.ejs',
             who: req.session.name,
             logined: "YES",
             boardtypes: boardtypes,
@@ -123,7 +121,7 @@ module.exports = {
     var purchaseId = req.params.purchaseId;
 
     db.query('update purchase set cancel=? where purchase_id=?', ['Y', purchaseId], (err, result)=>{
-          if (req.session.class === '00') {
+          if (req.session.class === '01') {
             res.redirect('/purchase/manage/view/u/1');
         } else {
             res.redirect('/purchase');
@@ -140,10 +138,9 @@ module.exports = {
           var haveCart = results.length !== 0;
           
           var context = {
-            menu:
-              req.session.class === "00"
-                ? "menuForManager.ejs"
-                : "menuForCustomer.ejs",
+            menu: req.session.class === '00' ? 'menuForMIS.ejs' :
+                    req.session.class === '01' ? 'menuForManager.ejs' :
+                    req.session.class === '02' ? 'menuForCustomer.ejs' : 'menuForCustomer.ejs',
             who: req.session.name || '손님',
             logined: req.session.class ? "YES" : "NO",
             boardtypes: boardtypes,
@@ -277,10 +274,7 @@ module.exports = {
                       order by date LIMIT ? OFFSET ?`, [numPerPage, offs],(err3, results) => {
             
             var context = {
-              menu:
-                req.session.class === "00"
-                  ? "menuForManager.ejs"
-                  : "menuForCustomer.ejs",
+              menu: "menuForManager.ejs",
               who: req.session.name,
               logined: "YES",
               boardtypes: boardtypes,
@@ -399,10 +393,7 @@ module.exports = {
                       order by date LIMIT ? OFFSET ?`, [numPerPage, offs],(err3, results) => {
             
             var context = {
-              menu:
-                req.session.class === "00"
-                  ? "menuForManager.ejs"
-                  : "menuForCustomer.ejs",
+              menu: "menuForManager.ejs",
               who: req.session.name,
               logined: "YES",
               boardtypes: boardtypes,

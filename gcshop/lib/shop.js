@@ -19,7 +19,9 @@ module.exports = {
                         if (authIsOwner(req, res)) {
                             // 로그인한 경우
                             context = {
-                                menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                                menu: req.session.class === '00' ? 'menuForMIS.ejs' :
+                                    req.session.class === '01' ? 'menuForManager.ejs' :
+                                    req.session.class === '02' ? 'menuForCustomer.ejs' : 'menuForCustomer.ejs',
                                 who: req.session.name,
                                 logined: 'YES',
                                 boardtypes: boardtypes,
@@ -51,7 +53,9 @@ module.exports = {
                             if (authIsOwner(req, res)) {
                                 // 로그인한 경우
                                 context = {
-                                    menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                                    menu: req.session.class === '00' ? 'menuForMIS.ejs' :
+                                        req.session.class === '01' ? 'menuForManager.ejs' :
+                                        req.session.class === '02' ? 'menuForCustomer.ejs' : 'menuForCustomer.ejs',
                                     who: req.session.name,
                                     logined: 'YES',
                                     boardtypes: boardtypes,
@@ -93,7 +97,9 @@ module.exports = {
                 if (authIsOwner(req, res)) {
                     // 로그인한 경우
                     context = {
-                        menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                        menu: req.session.class === '00' ? 'menuForMIS.ejs' :
+                            req.session.class === '01' ? 'menuForManager.ejs' :
+                            req.session.class === '02' ? 'menuForCustomer.ejs' : 'menuForCustomer.ejs',
                         who: req.session.name,
                         logined: 'YES',
                         boardtypes: boardtypes,
@@ -130,7 +136,9 @@ module.exports = {
                 if (authIsOwner(req, res)) {
                     // 로그인한 경우
                     context = {
-                        menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                        menu: req.session.class === '00' ? 'menuForMIS.ejs' :
+                            req.session.class === '01' ? 'menuForManager.ejs' :
+                            req.session.class === '02' ? 'menuForCustomer.ejs' : 'menuForCustomer.ejs',
                         who: req.session.name,
                         logined: 'YES',
                         boardtypes: boardtypes,
@@ -156,4 +164,89 @@ module.exports = {
             });
         });
     },
+
+    customeranal: (req, res)=>{
+
+        if (authIsOwner(req, res)){
+            if(req.session.class === '00'){
+                var sql1 = `select * from boardtype;`;
+                var sql2 = `select address, ROUND(( count(*) / (select count(*) from person )) * 100, 2)as rate
+                            from person group by address;`;
+                db.query(sql1 + sql2, (error, results)=>{
+                    var context = {
+                        menu : 'menuForMIS.ejs',
+                        who: req.session.name,
+                        logined: 'YES',
+                        boardtypes: results[0],
+                        body : 'customerAnal.ejs',
+                        percentage: results[1]
+                    };
+                    req.app.render('home', context, (err, html)=>{
+                        res.end(html);
+                    });
+                });
+            }
+        }
+        else{
+            var sql1 = `select * from boardtype`;
+            var sql2 = `select * from merchandise`;
+            db.query(sql1 + sql2, (error, results)=>{
+                var context = {
+                    menu : 'menuForCustomer.ejs',
+                    who: '손님',
+                    logined: 'NO',
+                    boardtypes: results[0],
+                    body : 'merchandise.ejs',
+                    haveMerchandise: results[1] !== 0,
+                    list: results[1],
+                    check: 'v'
+                }
+                req.app.render('home', context, (err, html)=>{
+                    res.end(html);
+                });
+            });
+        }
+    },
+    purchaseanal : (req, res)=>{
+        if (authIsOwner(req, res)){
+            if(req.session.class === '00'){
+                var sql1 = `select * from boardtype;`;
+                var sql2 = `select m.name, round((count(*) / (select count(*) from purchase)) * 100, 2) as rate from purchase p 
+                                join merchandise m on p.mer_id = m.mer_id
+                                group by p.mer_id;`;
+                db.query(sql1 + sql2, (error, results)=>{
+                    var context = {
+                        menu : 'menuForMIS.ejs',
+                        who: req.session.name,
+                        logined: 'YES',
+                        boardtypes: results[0],
+                        body : 'purchaseAnal.ejs',
+                        percentage: results[1]
+                    };
+                    req.app.render('home', context, (err, html)=>{
+                        res.end(html);
+                    });
+                });
+            }
+        }
+        else{
+            var sql1 = `select * from boardtype`;
+            var sql2 = `select * from merchandise`;
+            db.query(sql1 + sql2, (error, results)=>{
+                var context = {
+                    menu : 'menuForCustomer.ejs',
+                    who: '손님',
+                    logined: 'NO',
+                    boardtypes: results[0],
+                    body : 'merchandise.ejs',
+                    haveMerchandise: results[1] !== 0,
+                    list: results[1],
+                    check: 'v'
+                }
+                req.app.render('home', context, (err, html)=>{
+                    res.end(html);
+                });
+            });
+        }
+    }
 }

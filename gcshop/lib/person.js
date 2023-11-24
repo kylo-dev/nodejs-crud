@@ -3,7 +3,7 @@
 var db = require('./db');
 var sanitizeHtml = require('sanitize-html');
 
-function checkSessionClass(req, res, validClass = '00') {
+function checkSessionClass(req, res, validClass = '01') {
     if (req.session.class !== validClass) {
         const script = `
         <script type='text/javascript'>
@@ -50,11 +50,11 @@ module.exports = {
 
     create : (req,res)=>{
         db.query('select * from boardtype', (err, boardtypes)=>{
-            if(req.session.class !== '00'){
+            if(req.session.class !== '01'){
                 var context = {
-                    menu : 'menuForCustomer.ejs',
-                    who : '손님',
-                    logined : 'NO',
+                    menu: req.session.class === '00' ? 'menuForMIS.ejs' :'menuForCustomer.ejs',
+                    who : req.session.class === '00' ? req.session.name : '손님',
+                    logined : req.session.class === '00' ? 'YES' : 'NO',
                     boardtypes: boardtypes,
                     body : 'personCU.ejs',
                     check: 'c'

@@ -8,7 +8,7 @@ function authIsOwner(req, res) {
     return req.session.is_logined || false;
 }
 
-function checkSessionClass(req, res, validClass = '00') {
+function checkSessionClass(req, res, validClass = '01') {
     if (req.session.class !== validClass) {
         const script = `
         <script type='text/javascript'>
@@ -157,7 +157,9 @@ module.exports = {
     
                         if (authIsOwner(req, res)) {
                             var context = {
-                                menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                                menu: req.session.class === '00' ? 'menuForMIS.ejs' :
+                                        req.session.class === '01' ? 'menuForManager.ejs' :
+                                        req.session.class === '02' ? 'menuForCustomer.ejs' : 'menuForCustomer.ejs',
                                 who: req.session.name,
                                 logined: 'YES',
                                 boardtypes: boardtypes,
@@ -203,7 +205,9 @@ module.exports = {
 
                 if (authIsOwner(req, res)) {
                     var context = {
-                        menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                        menu: req.session.class === '00' ? 'menuForMIS.ejs' :
+                            req.session.class === '01' ? 'menuForManager.ejs' :
+                            req.session.class === '02' ? 'menuForCustomer.ejs' : 'menuForCustomer.ejs',
                         who: req.session.name,
                         logined: 'YES',
                         boardtypes: boardtypes,
@@ -239,7 +243,9 @@ module.exports = {
         db.query('select * from boardtype', (err, boardtypes)=>{
             db.query('select type_id, title from boardtype where type_id=?',[typeId], (err2, boardtype)=>{
                 var context = {
-                    menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                    menu: req.session.class === '00' ? 'menuForMIS.ejs' :
+                            req.session.class === '01' ? 'menuForManager.ejs' :
+                            req.session.class === '02' ? 'menuForCustomer.ejs' : 'menuForCustomer.ejs',
                     who: req.session.name,
                     logined: req.session.is_logined ? 'YES' : 'NO',
                     boardtypes: boardtypes,
@@ -286,7 +292,9 @@ module.exports = {
             db.query(sql1 + sql2, (error, multiresult)=>{
                 
                 var context = {
-                    menu: req.session.class === '00' ? 'menuForManager.ejs' : 'menuForCustomer.ejs',
+                    menu: req.session.class === '00' ? 'menuForMIS.ejs' :
+                            req.session.class === '01' ? 'menuForManager.ejs' :
+                            req.session.class === '02' ? 'menuForCustomer.ejs' : 'menuForCustomer.ejs',
                     who: req.session.name,
                     logined: req.session.is_logined ? 'YES' : 'NO',
                     boardtypes: boardtypes,

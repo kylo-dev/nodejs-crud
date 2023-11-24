@@ -18,4 +18,12 @@ router.get('/shop/detail/:merId', (req, res)=>{
     shop.detail(req, res);
 });
 
+router.get('/shop/anal/customer', (req, res)=>{
+    shop.customeranal(req, res);
+});
+
+router.get('/shop/anal/purchase', (req, res)=>{
+    shop.purchaseanal(req, res);
+});
+
 module.exports = router;

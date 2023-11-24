@@ -3,7 +3,7 @@
 var db = require('./db');
 var sanitizeHtml = require('sanitize-html');
 
-function checkSessionClass(req, res, validClass = '00') {
+function checkSessionClass(req, res, validClass = '01') {
     if (req.session.class !== validClass) {
         const script = `
         <script type='text/javascript'>
